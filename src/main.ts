@@ -1,10 +1,8 @@
-import App from './App.svelte';
+import Crossword from './Crossword.svelte';
 
-const app = new App({
+const app = new Crossword({
 	target: document.body,
-	props: {
-		name: 'world'
-	}
+	props: {}
 });
 
 export default app;
