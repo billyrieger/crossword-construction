@@ -24,6 +24,8 @@
 
   export let row: number;
   export let col: number;
+  export let value: string;
+  export let number: string;
   export let highlight: Highlight = Highlight.None;
 
   const dispatch = createEventDispatcher();

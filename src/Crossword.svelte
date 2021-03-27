@@ -12,13 +12,9 @@
   let active: { row: number; col: number } | undefined = undefined;
 
   let activeCell: CellData | undefined;
-  $: activeCell = cells[active?.row]?.[active.col];
+  $: activeCell = cells[active?.row]?.[active?.col];
 
   renumber();
-
-  function updateCell(row: number, col: number, data: CellData) {
-    cells[row][col] = { ...cells[row][col], ...data };
-  }
 
   $: highlight = (row: number, col: number): Highlight => {
     if (row === active?.row && col === active?.col) {
@@ -54,9 +50,9 @@
             cells[row][col - 1].kind === CellKind.Block
           ) {
             counter += 1;
-            updateCell(row, col, { kind: CellKind.Open, number: counter });
+            cells[row][col] = { ...cell, ...{ number: counter } };
           } else {
-            updateCell(row, col, { kind: CellKind.Open, number: undefined });
+            cells[row][col] = { ...cell, ...{ number: undefined } };
           }
         }
       }
@@ -81,9 +77,12 @@
   }
 
   function onKeyDown(e: KeyboardEvent) {
-    if (/^[a-zA-Z]$/.test(e.key) && activeCell !== undefined) {
-      cells[active.row][active.col].value =
-        activeCell.kind === CellKind.Open ? e.key.toUpperCase() : undefined;
+    if (
+      /^[a-zA-Z]$/.test(e.key) &&
+      activeCell !== undefined &&
+      activeCell.kind === CellKind.Open
+    ) {
+      cells[active.row][active.col].value = e.key.toUpperCase();
     }
     switch (e.key) {
       // Movement
