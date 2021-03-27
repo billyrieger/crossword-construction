@@ -1,5 +1,0 @@
-[workspace]
-members = ["src/solver"]
-
-[profile.release]
-opt-level = "s"
