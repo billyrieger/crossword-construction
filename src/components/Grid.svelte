@@ -6,7 +6,7 @@
   export let crossword: Crossword = new Crossword(5, 5);
 </script>
 
-<table class="grid">
+<table>
   {#each _.range(0, crossword.rows) as r}
     <tr>
       {#each _.range(0, crossword.cols) as c}

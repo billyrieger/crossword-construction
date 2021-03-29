@@ -1,10 +1,16 @@
 import _ from "lodash";
 import { CellType, CellKind } from "./types";
 
+enum Symmetry {
+    NONE,
+    ROT180,
+}
+
 export class Crossword {
     rows: number;
     cols: number;
     cells: CellType[][];
+    symmetry: Symmetry = Symmetry.ROT180;
 
     constructor(rows: number, cols: number) {
         this.rows = rows;
@@ -18,11 +24,27 @@ export class Crossword {
         this.renumber();
     }
 
+    private map([row, col]: [number, number]): [number, number][] {
+        switch (this.symmetry) {
+            case Symmetry.NONE:
+                return [[row, col]];
+            case Symmetry.ROT180:
+                return [
+                    [row, col],
+                    [this.rows - row - 1, this.cols - col - 1],
+                ];
+        }
+    }
+
     toggleCell(row: number, col: number): void {
         if (this.cells[row][col].kind === CellKind.OPEN) {
-            this.cells[row][col] = { kind: CellKind.BLOCK };
+            for (const [r, c] of this.map([row, col])) {
+                this.cells[r][c] = { kind: CellKind.BLOCK };
+            }
         } else {
-            this.cells[row][col] = { kind: CellKind.OPEN };
+            for (const [r, c] of this.map([row, col])) {
+                this.cells[r][c] = { kind: CellKind.OPEN };
+            }
         }
         this.renumber();
     }
@@ -85,7 +107,6 @@ export class Crossword {
                 entries = [...entries, currentEntry];
             }
         }
-        console.log(entries);
         return entries;
     }
 }

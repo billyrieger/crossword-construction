@@ -4,8 +4,8 @@ export enum CellKind {
 }
 
 export type CellType = {
-    kind: CellKind,
-    id?: number,
+    kind: CellKind;
+    id?: number;
     value?: string;
     number?: number;
-}
+};

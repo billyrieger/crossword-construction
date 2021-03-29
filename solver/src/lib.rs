@@ -23,6 +23,8 @@ pub fn solve(entries: JsValue) -> JsValue {
     let state = SearchState::new(entries, dicts.clone());
     let mut solver = Solver::new(state);
 
+    web_sys::console::log_1(&"about to solve".into());
+
     loop {
         match solver.solve() {
             Some(_) => {
