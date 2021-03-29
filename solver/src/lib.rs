@@ -14,7 +14,7 @@ use wasm_bindgen::prelude::*;
 
 const ALPHABET_LEN: usize = 26;
 
-pub const WORDLIST: &'static [u8] = include_bytes!("../../../nyt.txt");
+pub const WORDLIST: &'static [u8] = include_bytes!("../../wordlist.txt");
 
 #[wasm_bindgen]
 pub fn solve(entries: JsValue) -> JsValue {
