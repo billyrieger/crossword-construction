@@ -70,6 +70,7 @@ export default {
       inlineSources: !production,
     }),
     rust({
+      debug: false,
       verbose: true,
       serverPath: "/build/",
     }),
