@@ -1,18 +1,28 @@
 <script lang="ts">
+  import Grid from "./components/Grid.svelte";
   import Solver from "./components/Solver.svelte";
 
-  let n: number = 5;
+  let grid: Grid;
+  $: console.log(grid);
+  $: entries = grid ? grid.entries() : [];
+  let width = 15;
 </script>
 
 <main>
   <button
     on:click={() => {
-      n += 1;
-    }}
+      grid.resetGrid();
+      grid = grid;
+    }}>Reset grid</button
   >
-    Click me!
-  </button>
-  <Solver input={n} />
+  <Grid bind:this={grid} rows={width} />
 </main>
 
-<style></style>
+<Solver {entries} />
+
+<style>
+  main {
+    margin: 0 auto;
+    width: 80%;
+  }
+</style>

@@ -2,14 +2,22 @@
   import { onMount } from "svelte";
   import wasm from "../../solver/Cargo.toml";
 
-  export let input: number;
+  export let entries: number[][];
 
-  let double: (n: number) => number;
+  let solve: (entries: any) => any;
+  let solution: string = "";
 
   onMount(async () => {
     const module = await wasm();
-    double = module.double;
+    solve = module.solve;
   });
 </script>
 
-<p>{input} doubled is {double ? double(input) : "idk!"}!</p>
+<button
+  on:click={() => {
+    // console.log(entries);
+    // solution = solve([[0, 1, 2, 3, 4, 5]]);
+    solution = "solved!";
+  }}>Solve</button
+>
+<p>The solution is: {solution}.</p>
