@@ -1,6 +1,11 @@
+export enum CellKind {
+    BLOCK,
+    OPEN,
+}
+
 export type CellType = {
-    block: boolean,
+    kind: CellKind,
     id?: number,
-    value?: string,
-    number?: number,
+    value?: string;
+    number?: number;
 }

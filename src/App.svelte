@@ -1,24 +1,30 @@
 <script lang="ts">
-  import Grid from "./components/Grid.svelte";
   import Solver from "./components/Solver.svelte";
+  import Grid from "./components/Grid.svelte";
+  import { Crossword } from "./Crossword";
+  import { range } from "lodash";
+  import { CellKind } from "./types";
 
-  let grid: Grid;
-  $: console.log(grid);
-  $: entries = grid ? grid.entries() : [];
-  let width = 15;
+  let crossword = new Crossword(15, 15);
 </script>
 
 <main>
-  <button
-    on:click={() => {
-      grid.resetGrid();
-      grid = grid;
-    }}>Reset grid</button
-  >
-  <Grid bind:this={grid} rows={width} />
+  <Grid bind:crossword />
+  <Solver
+    entries={crossword.entries()}
+    on:solved={(e) => {
+      const solution = e.detail;
+      for (const r of range(0, crossword.rows)) {
+        for (const c of range(0, crossword.cols)) {
+          const cell = crossword.cells[r][c];
+          if (cell.kind === CellKind.OPEN) {
+            crossword.cells[r][c].value = solution.charAt(cell.id);
+          }
+        }
+      }
+    }}
+  />
 </main>
-
-<Solver {entries} />
 
 <style>
   main {

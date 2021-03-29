@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import wasm from "../../solver/Cargo.toml";
 
-  export let entries: number[][];
+  const dispatch = createEventDispatcher();
+
+  export let entries: number[][] = [];
 
   let solve: (entries: any) => any;
-  let solution: string = "";
 
   onMount(async () => {
     const module = await wasm();
@@ -15,9 +16,9 @@
 
 <button
   on:click={() => {
-    // console.log(entries);
-    // solution = solve([[0, 1, 2, 3, 4, 5]]);
-    solution = "solved!";
+    console.log("solving...");
+    const solution = solve(entries);
+    console.log("solved");
+    dispatch("solved", solution);
   }}>Solve</button
 >
-<p>The solution is: {solution}.</p>

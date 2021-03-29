@@ -1,12 +1,13 @@
 <script lang="ts">
+  import { CellKind } from "../types";
   import type { CellType } from "../types";
 
   export let cell: CellType;
 </script>
 
-<div class="cell" class:block={cell.block} on:mousedown>
-  <div class="number">{cell.number !== undefined ? cell.number : ""}</div>
-  <div class="value">{cell.value !== undefined ? cell.value : ""}</div>
+<div class="cell" class:block={cell.kind === CellKind.BLOCK} on:mousedown>
+  <div class="number">{cell.number ?? ""}</div>
+  <div class="value">{cell.value ?? ""}</div>
 </div>
 
 <style>
