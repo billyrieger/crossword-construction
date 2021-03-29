@@ -72,7 +72,8 @@ export default {
     rust({
       debug: false,
       verbose: true,
-      serverPath: "/build/",
+      inlineWasm: true,
+      // serverPath: "/build/",
     }),
 
     // In dev mode, call `npm run start` once
