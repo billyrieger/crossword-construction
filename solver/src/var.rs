@@ -51,7 +51,7 @@ impl Dictionary {
                     })
                     .collect::<Option<Word>>()
                 {
-                    if word.len() < max_len {
+                    if word.len() <= max_len {
                         words[word.len()].push(word);
                     }
                 }
