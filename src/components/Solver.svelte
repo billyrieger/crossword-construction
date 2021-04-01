@@ -1,25 +1,25 @@
 <script lang="ts">
-  // import { createEventDispatcher, onMount } from "svelte";
-  // import wasm from "../../solver/Cargo.toml";
+  import { createEventDispatcher, onMount } from "svelte";
+  import WebWorker from "web-worker:../Worker.ts";
 
-  // const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
   export let entries: number[][] = [];
+  let worker;
 
-  // let solve: (entries: any) => any;
-
-  // onMount(async () => {
-  //   const module = await wasm();
-  //   solve = module.solve;
-  // });
+  onMount(() => {
+    worker = new WebWorker();
+    worker.onmessage = ({ data }) => {
+      console.log("solved");
+      dispatch("solved", data);
+    };
+    worker.postMessage({ type: "init" });
+  });
 </script>
 
 <button
   on:click={() => {
     console.log("solving...");
-    // const solution = solve(entries);
-    console.log(entries);
-    console.log("solved");
-    // dispatch("solved", solution);
+    worker.postMessage({ type: "solve", entries });
   }}>Solve</button
 >

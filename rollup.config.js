@@ -5,10 +5,12 @@ import livereload from "rollup-plugin-livereload";
 import serve from "rollup-plugin-serve";
 import { terser } from "rollup-plugin-terser";
 import sveltePreprocess from "svelte-preprocess";
-import typescript from "@rollup/plugin-typescript";
+// import typescript from "@rollup/plugin-typescript";
+import typescript from "rollup-plugin-typescript2";
 import css from "rollup-plugin-css-only";
 import rust from "@wasm-tool/rollup-plugin-rust";
 import workerLoader from "rollup-plugin-web-worker-loader";
+import alias from '@rollup/plugin-alias'
 import fs from "fs";
 
 const production = !process.env.ROLLUP_WATCH;
@@ -37,6 +39,9 @@ export default {
         fs.writeFileSync('public/build/bundle.css', styles);
       }
     }),
+    alias({
+      entries: [{ find: '../types', replacement: '../types.ts' }, { find: '../Crossword', replacement: '../Crossword.ts' }],
+    }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
@@ -49,8 +54,8 @@ export default {
     }),
     commonjs(),
     typescript({
-      sourceMap: !production,
-      inlineSources: !production,
+      // include: ["*.ts+(|x)", "**/*.ts+(|x)", "*.svelte", "**/*.svelte"],
+      rollupCommonJSResolveHack: true,
     }),
     rust({
       debug: false,

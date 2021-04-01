@@ -10,7 +10,7 @@ self.onmessage = async ({ data }) => {
             module = await wasm();
             break;
         case "solve":
-            self.postMessage(module.solve([[0, 1, 2]]));
+            self.postMessage(module.solve(data.entries));
             break;
     }
 };

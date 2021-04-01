@@ -24,6 +24,58 @@ export class Crossword {
         this.renumber();
     }
 
+    public sample(): void {
+        console.log("XXX");
+        const blocks = [
+            [0, 4],
+            [0, 10],
+            [1, 4],
+            [1, 10],
+            [2, 4],
+            [2, 10],
+            [3, 7],
+            [4, 0],
+            [4, 1],
+            [4, 2],
+            [4, 8],
+            [4, 12],
+            [4, 13],
+            [4, 14],
+            [5, 5],
+            [5, 9],
+            [6, 10],
+            [7, 3],
+            [7, 11],
+            [8, 4],
+            [9, 5],
+            [9, 9],
+            [10, 0],
+            [10, 1],
+            [10, 2],
+            [10, 6],
+            [10, 12],
+            [10, 13],
+            [10, 14],
+            [11, 7],
+            [12, 4],
+            [12, 10],
+            [13, 4],
+            [13, 10],
+            [14, 4],
+            [14, 10],
+        ];
+        for (const r of _.range(this.rows)) {
+            for (const c of _.range(this.cols)) {
+                if (_.find(blocks, (e) => _.isEqual(e, [r, c]))) {
+                    this.cells[r][c] = { kind: CellKind.BLOCK };
+                } else {
+                    this.cells[r][c] = { kind: CellKind.OPEN };
+                }
+            }
+        }
+        this.renumber();
+    }
+
     private map([row, col]: [number, number]): [number, number][] {
         switch (this.symmetry) {
             case Symmetry.NONE:
