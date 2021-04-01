@@ -9,3 +9,9 @@ export type CellType = {
     value?: string;
     number?: number;
 };
+
+export type OpenCell = {
+    id: number;
+    value?: string;
+    number?: number;
+};

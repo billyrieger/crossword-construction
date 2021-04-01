@@ -23,7 +23,7 @@
   {/each}
 </table>
 
-<style>
+<style lang="scss">
   table {
     border-collapse: collapse;
   }

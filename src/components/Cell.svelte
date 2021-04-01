@@ -10,7 +10,7 @@
   <div class="value">{cell.value ?? ""}</div>
 </div>
 
-<style>
+<style lang="scss">
   * {
     user-select: none;
   }

@@ -2,38 +2,16 @@ import svelte from "rollup-plugin-svelte";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
+import serve from "rollup-plugin-serve";
 import { terser } from "rollup-plugin-terser";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 import rust from "@wasm-tool/rollup-plugin-rust";
+import workerLoader from "rollup-plugin-web-worker-loader";
+const fs = require('fs');
 
 const production = !process.env.ROLLUP_WATCH;
-
-function serve() {
-  let server;
-
-  function toExit() {
-    if (server) server.kill(0);
-  }
-
-  return {
-    writeBundle() {
-      if (server) return;
-      server = require("child_process").spawn(
-        "npm",
-        ["run", "start", "--", "--dev"],
-        {
-          stdio: ["ignore", "inherit", "inherit"],
-          shell: true,
-        }
-      );
-
-      process.on("SIGTERM", toExit);
-      process.on("exit", toExit);
-    },
-  };
-}
 
 export default {
   input: "src/main.ts",
@@ -49,11 +27,16 @@ export default {
       compilerOptions: {
         // enable run-time checks when not in production
         dev: !production,
+        sourcemap: !production,
       },
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
-    css({ output: "bundle.css" }),
+    css({
+      output: function (styles) {
+        fs.writeFileSync('public/build/bundle.css', styles);
+      }
+    }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
@@ -75,13 +58,9 @@ export default {
       inlineWasm: true,
       // serverPath: "/build/",
     }),
+    workerLoader(),
 
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
-    !production && serve(),
-
-    // Watch the `public` directory and refresh the
-    // browser on changes when not in production
+    !production && serve("public"),
     !production && livereload("public"),
 
     // If we're building for production (npm run build

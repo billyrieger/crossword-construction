@@ -2,4 +2,8 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
 
   "include": ["src/**/*"],
+
+  "compilerOptions": {
+    "isolatedModules": false,
+  }
 }
