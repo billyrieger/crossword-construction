@@ -9,7 +9,7 @@ import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 import rust from "@wasm-tool/rollup-plugin-rust";
 import workerLoader from "rollup-plugin-web-worker-loader";
-const fs = require('fs');
+import fs from "fs";
 
 const production = !process.env.ROLLUP_WATCH;
 
