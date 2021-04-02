@@ -1,23 +1,34 @@
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
 
-module.exports = {
+const appConfig = {
   entry: "./src/index.ts",
   plugins: [
     new HtmlWebpackPlugin({
       template: "./index.html",
     }),
+    new MiniCssExtractPlugin(),
   ],
   module: {
     rules: [
       {
         test: /\.svelte$/,
-        use: "svelte-loader",
+        use: {
+          loader: "svelte-loader",
+          options: {
+            emitCss: true,
+          },
+        },
       },
       {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
@@ -30,3 +41,5 @@ module.exports = {
   },
   mode: "production",
 };
+
+module.exports = appConfig;
