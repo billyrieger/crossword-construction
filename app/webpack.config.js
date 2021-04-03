@@ -49,6 +49,7 @@ const workerConfig = {
   plugins: [
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, "../solver"),
+      outDir: path.resolve(__dirname, "../solver/pkg"),
       forceMode: "production",
     }),
   ],
