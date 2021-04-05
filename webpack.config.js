@@ -1,14 +1,12 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
-const path = require("path");
+const { resolve } = require("path");
 
 const appConfig = {
-  entry: "./src/index.ts",
+  entry: "./src/app/index.ts",
   plugins: [
-    new HtmlWebpackPlugin({
-      template: "./index.html",
-    }),
+    new HtmlWebpackPlugin({ template: "./index.html" }),
     new MiniCssExtractPlugin(),
   ],
   module: {
@@ -17,13 +15,11 @@ const appConfig = {
         test: /\.svelte$/,
         use: {
           loader: "svelte-loader",
-          options: {
-            emitCss: true,
-          },
+          options: { emitCss: true },
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: "ts-loader",
         exclude: /node_modules/,
       },
@@ -33,36 +29,27 @@ const appConfig = {
       },
     ],
   },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js", ".svelte"],
-  },
-  output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
-  },
+  resolve: { extensions: [".ts", ".js", ".svelte"] },
+  output: { filename: "bundle.js", path: resolve(__dirname, "dist") },
   mode: "production",
 };
 
 const workerConfig = {
-  entry: "./src/worker.js",
+  entry: "./src/app/worker.js",
   target: "webworker",
   plugins: [
     new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, "../solver"),
-      outDir: path.resolve(__dirname, "../solver/pkg"),
+      crateDirectory: resolve(__dirname, "src/solver"),
+      outDir: resolve(__dirname, "src/solver/pkg"),
       forceMode: "production",
     }),
   ],
-  resolve: {
-    extensions: [".js", ".wasm"],
-  },
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "worker.js",
-  },
   experiments: {
     asyncWebAssembly: true,
   },
+  resolve: { extensions: [".js", ".wasm"] },
+  output: { filename: "worker.js", path: resolve(__dirname, "dist") },
+  mode: "production",
 };
 
 module.exports = [appConfig, workerConfig];

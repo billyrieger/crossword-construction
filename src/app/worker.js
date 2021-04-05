@@ -1,4 +1,4 @@
-import("../../solver/pkg")
+import("../solver/pkg")
   .then((wasm) => {
     self.addEventListener("message", (ev) => {
       console.log("Web worker started.");
