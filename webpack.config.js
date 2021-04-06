@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+const sveltePreprocess = require("svelte-preprocess");
 const { resolve } = require("path");
 
 const appConfig = {
@@ -15,13 +16,12 @@ const appConfig = {
         test: /\.svelte$/,
         use: {
           loader: "svelte-loader",
-          options: { emitCss: true },
+          options: { emitCss: true, preprocess: sveltePreprocess({}) },
         },
       },
       {
         test: /\.ts$/,
         use: "ts-loader",
-        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -35,7 +35,7 @@ const appConfig = {
 };
 
 const workerConfig = {
-  entry: "./src/app/worker.js",
+  entry: "./src/app/worker.ts",
   target: "webworker",
   plugins: [
     new WasmPackPlugin({
@@ -44,10 +44,17 @@ const workerConfig = {
       forceMode: "production",
     }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: "ts-loader",
+      },
+    ],
+  },
   experiments: {
     asyncWebAssembly: true,
   },
-  resolve: { extensions: [".js", ".wasm"] },
   output: { filename: "worker.js", path: resolve(__dirname, "dist") },
   mode: "production",
 };

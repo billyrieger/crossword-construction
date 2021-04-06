@@ -4,5 +4,6 @@
     "module": "es6",
     "outDir": "./dist/",
     "noImplicitAny": true,
-  }
+  },
+  "include": ["src/**/*"]
 }
