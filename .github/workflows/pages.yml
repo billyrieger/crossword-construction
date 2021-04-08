@@ -25,9 +25,6 @@ jobs:
 
       - run: |
           cargo install wasm-pack
-          cd src/solver
-          wasm-pack build
-          cd ../..
           npm install
           npm run build
 

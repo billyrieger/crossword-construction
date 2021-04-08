@@ -1,17 +1,19 @@
 {
   "private": true,
   "scripts": {
-    "build": "webpack",
+    "build:rust": "wasm-pack build src/solver",
+    "build:webpack": "webpack",
+    "build": "run-s build:rust build:webpack",
     "dev": "webpack serve --open"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
     "@types/lodash": "^4.14.168",
-    "@wasm-tool/wasm-pack-plugin": "^1.3.3",
     "css-loader": "^5.2.0",
     "html-webpack-plugin": "^5.3.1",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^1.4.0",
+    "npm-run-all": "^4.1.5",
     "svelte": "^3.37.0",
     "svelte-loader": "^3.0.0",
     "svelte-preprocess": "^4.7.0",
