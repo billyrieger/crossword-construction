@@ -1,4 +1,5 @@
-import _ from "lodash";
+import range from "lodash/range";
+import chunk from "lodash/chunk";
 import type { CellType } from "./types";
 
 export class Crossword {
@@ -9,8 +10,8 @@ export class Crossword {
   constructor(rows: number, cols: number) {
     this.rows = rows;
     this.cols = cols;
-    this.cells = _.chunk(
-      _.range(0, rows * cols).map(() => {
+    this.cells = chunk(
+      range(0, rows * cols).map(() => {
         return {};
       }),
       cols

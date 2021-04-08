@@ -1,5 +1,5 @@
 <script lang="ts">
-  import _ from "lodash";
+  import range from "lodash/range";
   import { Crossword } from "../crossword";
   import Cell from "./Cell.svelte";
 
@@ -7,9 +7,9 @@
 </script>
 
 <table>
-  {#each _.range(0, crossword.rows) as r}
+  {#each range(0, crossword.rows) as r}
     <tr>
-      {#each _.range(0, crossword.cols) as c}
+      {#each range(0, crossword.cols) as c}
         <td
           on:mousedown={() => {
             crossword.toggleCell(r, c);
