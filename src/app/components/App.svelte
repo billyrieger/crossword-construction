@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Grid from "./Grid.svelte";
   export let name: string;
 
   let result: number;
@@ -13,10 +14,5 @@
   <h1>Hello {name}!</h1>
   <button on:click={() => worker.postMessage("asdf")}>Click me</button>
   <p>{result ?? "idk"}</p>
+  <Grid />
 </main>
-
-<style>
-  * {
-    color: blue;
-  }
-</style>
