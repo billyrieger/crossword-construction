@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "build:rust": "wasm-pack build src/solver",
-    "build:webpack": "webpack",
+    "build:rust": "wasm-pack build --release src/solver",
+    "build:webpack": "webpack --mode production",
     "build": "run-s build:rust build:webpack",
-    "dev": "webpack serve --open"
+    "dev": "webpack serve --open --mode development"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",

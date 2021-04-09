@@ -5,6 +5,8 @@ const { resolve } = require("path");
 
 const appConfig = {
   entry: "./src/app/index.ts",
+  output: { path: resolve(__dirname, "dist"), filename: "bundle.js" },
+  devtool: "source-map",
   plugins: [
     new HtmlWebpackPlugin({ template: "./index.html" }),
     new MiniCssExtractPlugin(),
@@ -23,21 +25,16 @@ const appConfig = {
     ],
   },
   resolve: { extensions: [".ts", ".js", ".svelte"] },
-  output: { filename: "bundle.js", path: resolve(__dirname, "dist") },
-  mode: "production",
+  mode: "development",
 };
 
 const workerConfig = {
   entry: "./src/app/worker.ts",
+  output: { path: resolve(__dirname, "dist"), filename: "worker.js" },
   target: "webworker",
-  module: {
-    rules: [{ test: /\.ts$/, use: "ts-loader" }],
-  },
-  experiments: {
-    asyncWebAssembly: true,
-  },
-  output: { filename: "worker.js", path: resolve(__dirname, "dist") },
-  mode: "production",
+  module: { rules: [{ test: /\.ts$/, use: "ts-loader" }] },
+  experiments: { asyncWebAssembly: true },
+  mode: "development",
 };
 
 module.exports = [appConfig, workerConfig];
