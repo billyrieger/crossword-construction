@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { square, solve } from "../solver/pkg";
+import { square } from "../solver/pkg";
 import type { Message, Solution } from "./types";
 
 onmessage = (event: MessageEvent<Message>) => {
