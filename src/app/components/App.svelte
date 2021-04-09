@@ -1,10 +1,12 @@
 <script lang="ts">
   import Grid from "./Grid.svelte";
   import type { Message, Query } from "../types";
+  import { Crossword } from "../crossword";
 
-  const input = 1442;
+  const input: BigInt = BigInt(1442);
 
-  let result: number;
+  let result: BigInt;
+  let crossword = new Crossword(15, 15);
 
   const worker = new Worker("worker.js");
   worker.addEventListener("message", (event: MessageEvent<Message>) => {
@@ -18,9 +20,12 @@
   });
 
   const solve = () => {
+    const entries = [...crossword.across, ...crossword.down].map((entry) =>
+      entry.map((cell) => cell.id)
+    );
     const msg: Query = {
       kind: "query",
-      input,
+      input: entries,
     };
     worker.postMessage(msg);
   };
@@ -30,13 +35,13 @@
   <div class="wrap">
     <button on:click={solve}>Click me</button>
     <p>{result ?? `What is ${input} squared?`}</p>
-    <Grid />
+    <Grid bind:crossword />
   </div>
 </main>
 
 <style>
   .wrap {
     margin: 0 auto;
-    width: 400px;
+    width: 600px;
   }
 </style>

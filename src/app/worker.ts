@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import * as wasm from "../solver/pkg";
+import { square, solve } from "../solver/pkg";
 import type { Message, Solution } from "./types";
 
 onmessage = (event: MessageEvent<Message>) => {
@@ -11,7 +11,7 @@ onmessage = (event: MessageEvent<Message>) => {
 
     case "query":
       console.log("Preparing to solve.");
-      const solution = wasm.square(event.data.input);
+      const solution = square(BigInt(5));
       const msg: Solution = {
         kind: "solution",
         output: solution,

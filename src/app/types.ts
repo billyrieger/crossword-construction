@@ -1,4 +1,5 @@
 export type CellType = {
+  id: number,
   number?: number;
   value?: string;
 };
@@ -11,10 +12,10 @@ export interface InitMessage  {
 
 export interface Query {
   kind: "query",
-  input: number,
+  input: Array<Array<number>>,
 }
 
 export interface Solution {
   kind: "solution",
-  output: number,
+  output: BigInt,
 }

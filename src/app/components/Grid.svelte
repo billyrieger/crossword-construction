@@ -4,18 +4,18 @@
   import Cell from "./Cell.svelte";
 
   export let crossword: Crossword = new Crossword(5, 5);
+
+  function toggleCell(row: number, col: number) {
+    crossword.toggleCell(row, col);
+    crossword = crossword;
+  }
 </script>
 
 <table>
   {#each range(0, crossword.rows) as r}
     <tr>
       {#each range(0, crossword.cols) as c}
-        <td
-          on:mousedown={() => {
-            crossword.toggleCell(r, c);
-            crossword = crossword;
-          }}
-        >
+        <td on:mousedown={() => toggleCell(r, c)}>
           <Cell cell={crossword.cells[r][c]} />
         </td>
       {/each}
