@@ -1,7 +1,6 @@
 import range from "lodash/range";
 import chunk from "lodash/chunk";
 import type { CellType } from "./types";
-import { object_without_properties } from "svelte/internal";
 
 export class Crossword {
   rows: number;
@@ -22,10 +21,10 @@ export class Crossword {
     this.renumber();
   }
 
-  findIds() {
+  renumber() {
     let id = 0;
-    for (const [r, row] of this.cells.entries()) {
-      for (const [c, cell] of row.entries()) {
+    for (const row of this.cells) {
+      for (let cell of row) {
         if (!cell) {
           continue;
         }
@@ -33,10 +32,7 @@ export class Crossword {
         id += 1;
       }
     }
-  }
 
-  renumber() {
-    this.findIds();
     this.across = [];
     this.down = [];
     let number = 1;
@@ -85,6 +81,5 @@ export class Crossword {
     let cell = this.cells[row][col];
     this.cells[row][col] = cell ? undefined : { id: -1 };
     this.renumber();
-    console.log(this);
   }
 }
