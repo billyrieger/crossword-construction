@@ -3,12 +3,12 @@
   import Grid from "./Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  let crossword = new Crossword(15, 15);
+  let crossword = new Crossword(7, 7);
 </script>
 
 <main>
   <div class="wrap">
-    <Grid bind:crossword />
+    <Grid bind:crossword editable={true} />
     <Solver input={crossword} />
   </div>
 </main>

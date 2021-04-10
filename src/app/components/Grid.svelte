@@ -36,8 +36,8 @@
   }
 
   td {
-    width: 30px;
-    height: 30px;
+    width: 2em;
+    height: 2em;
     border-bottom: solid black 1px;
     border-right: solid black 1px;
   }

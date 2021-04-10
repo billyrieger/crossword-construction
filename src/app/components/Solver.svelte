@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Crossword } from "../crossword";
-  import { BeginSearch, MsgKind, ReturnMsg, WorkerMsg } from "../types";
+  import { MsgKind, ReturnMsg, WorkerMsg } from "../types";
+  import Grid from "./Grid.svelte";
 
   export let input: Crossword;
 
@@ -10,14 +11,14 @@
   };
   send({ msgKind: MsgKind.RESET });
 
-  let found = new Array<string>();
+  let found = new Array<Crossword>();
 
   worker.addEventListener(
     "message",
     ({ data: msg }: MessageEvent<ReturnMsg>) => {
       switch (msg.msgKind) {
         case MsgKind.SOLUTION_FOUND: {
-          found.push(msg.solution);
+          found.push(input.applySolution(msg.solution));
           found = found;
           break;
         }
@@ -38,8 +39,16 @@
 
 <div>
   <button on:click={solve}>Solve</button>
-  <p>The solution(s) are: {found}</p>
+  {#each found as solution}
+    <div class="solution">
+      <Grid crossword={solution} />
+    </div>
+  {/each}
 </div>
 
 <style>
+  .solution {
+    font-size: 75%;
+    padding: 1em;
+  }
 </style>
