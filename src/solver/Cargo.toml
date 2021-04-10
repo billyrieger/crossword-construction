@@ -9,4 +9,5 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
+deunicode = "1.2.0"
 wasm-bindgen = "0.2.73"
