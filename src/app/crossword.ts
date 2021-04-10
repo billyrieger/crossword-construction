@@ -1,5 +1,6 @@
 import range from "lodash/range";
 import chunk from "lodash/chunk";
+import cloneDeep from "lodash/cloneDeep";
 import type { CellType, Entry } from "./types";
 
 export class Crossword {
@@ -81,6 +82,21 @@ export class Crossword {
         return [...this.across, ...this.down].map((cells) =>
             cells.map((cell) => cell.id)
         );
+    }
+
+    applySolution(solution: string): Crossword {
+        let self = cloneDeep(this);
+
+        for (const row of self.cells) {
+            for (let cell of row) {
+                if (!cell) {
+                    continue;
+                }
+                cell.value = solution.charAt(cell.id);
+            }
+        }
+
+        return self;
     }
 
     toggleCell(row: number, col: number) {
