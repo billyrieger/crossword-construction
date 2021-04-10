@@ -15,6 +15,7 @@ type DeepReadonlyObject<T> = {
 };
 
 export interface CellType {
+    id: number;
     number?: number;
     value?: string;
 };
