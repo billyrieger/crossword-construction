@@ -7,8 +7,11 @@
   export let editable = false;
 
   function toggleCell(row: number, col: number) {
-    crossword.toggleCell(row, col);
-    crossword = crossword;
+    if (crossword.getCell(row, col)) {
+      crossword = crossword.updateCell(row, col, undefined);
+    } else {
+      crossword = crossword.updateCell(row, col, {});
+    }
   }
 </script>
 
@@ -23,7 +26,7 @@
             }
           }}
         >
-          <Cell cell={crossword.cells[r][c]} />
+          <Cell cell={crossword.getCell(r, c)} />
         </td>
       {/each}
     </tr>

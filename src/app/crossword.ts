@@ -1,63 +1,73 @@
 import range from "lodash/range";
 import chunk from "lodash/chunk";
 import cloneDeep from "lodash/cloneDeep";
+import inRange from "lodash/inRange";
 import type { CellType, Entry } from "./types";
+import type { Maybe } from "./types/util";
 
 export class Crossword {
-    rows: number;
-    cols: number;
-    cells: Array<Array<CellType | undefined>>;
-    across: Array<Array<CellType>> = [];
-    down: Array<Array<CellType>> = [];
+    readonly rows: number;
+    readonly cols: number;
+    private cells: Array<Array<CellType | undefined>>;
 
     constructor(rows: number, cols: number) {
         this.rows = rows;
         this.cols = cols;
         this.cells = chunk(
-            range(0, rows * cols).map((id) => {
-                return { id };
+            range(0, rows * cols).map(() => {
+                return {};
             }),
             cols
         );
-        this.renumber();
+        this.assignNumbersInPlace();
     }
 
-    renumber() {
-        let id = 0;
-        for (const row of this.cells) {
-            for (let cell of row) {
-                if (!cell) {
-                    continue;
-                }
-                cell.id = id;
-                id += 1;
-            }
-        }
-
-        this.across = [];
-        this.down = [];
+    private assignNumbersInPlace() {
         let number = 1;
-        for (const [r, row] of this.cells.entries()) {
-            for (const [c, cell] of row.entries()) {
+        for (const r of range(0, this.rows)) {
+            for (const c of range(0, this.cols)) {
+                let cell = this.cells[r][c];
                 if (!cell) {
                     continue;
                 }
                 const isAcross = c === 0 || !this.cells[r][c - 1];
                 const isDown = r === 0 || !this.cells[r - 1][c];
-
                 if (isAcross || isDown) {
                     cell.number = number;
                     number += 1;
-                    if (isAcross) {
-                        this.across.push(this.calculateAcross(r, c));
-                    } else {
-                        this.down.push(this.calculateDown(r, c));
-                    }
                 } else {
                     cell.number = undefined;
                 }
             }
         }
+    }
+
+    getCell(row: number, col: number): Maybe<CellType> {
+        return cloneDeep(this.cells[row]?.[col]);
+    }
+
+    private updateCellInPlace(
+        row: number,
+        col: number,
+        update: Maybe<Partial<CellType>>
+    ) {
+        if (inRange(row, 0, this.rows) && inRange(col, 0, this.cols)) {
+            if (update) {
+                this.cells[row][col] = { ...this.cells[row][col], ...update };
+            } else {
+                this.cells[row][col] = undefined;
+            }
+        }
+    }
+
+    updateCell(
+        row: number,
+        col: number,
+        update: Partial<Maybe<CellType>>
+    ): Crossword {
+        let result = cloneDeep(this);
+        result.updateCellInPlace(row, col, update);
+        return result;
     }
 
     calculateAcross(row: number, col: number): Array<CellType> {
@@ -78,30 +88,20 @@ export class Crossword {
         return cells;
     }
 
-    allEntries(): Array<Entry> {
-        return [...this.across, ...this.down].map((cells) =>
-            cells.map((cell) => cell.id)
-        );
-    }
-
     applySolution(solution: string): Crossword {
-        let self = cloneDeep(this);
+        let result = cloneDeep(this);
+        let counter = 0;
 
-        for (const row of self.cells) {
+        for (const row of result.cells) {
             for (let cell of row) {
                 if (!cell) {
                     continue;
                 }
-                cell.value = solution.charAt(cell.id);
+                cell.value = solution.charAt(counter);
+                counter += 1;
             }
         }
 
-        return self;
-    }
-
-    toggleCell(row: number, col: number) {
-        let cell = this.cells[row][col];
-        this.cells[row][col] = cell ? undefined : { id: -1 };
-        this.renumber();
+        return result;
     }
 }

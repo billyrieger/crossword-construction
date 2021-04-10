@@ -29,11 +29,11 @@
   const solve = () => {
     send({ msgKind: MsgKind.RESET });
     console.log("appending entries");
-    for (const entry of input.allEntries()) {
-      send({ msgKind: MsgKind.ADD_ENTRY, entry });
-    }
-    console.log("begin search");
-    send({ msgKind: MsgKind.BEGIN_SEARCH });
+    // for (const entry of input.allEntries()) {
+    //   send({ msgKind: MsgKind.ADD_ENTRY, entry });
+    // }
+    // console.log("begin search");
+    // send({ msgKind: MsgKind.BEGIN_SEARCH });
   };
 </script>
 
