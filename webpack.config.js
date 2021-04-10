@@ -29,10 +29,9 @@ const appConfig = {
 };
 
 const workerConfig = {
-  entry: "./src/app/worker.ts",
+  entry: "./src/app/worker.js",
   output: { path: resolve(__dirname, "dist"), filename: "worker.js" },
   target: "webworker",
-  module: { rules: [{ test: /\.ts$/, use: "ts-loader" }] },
   experiments: { asyncWebAssembly: true },
   mode: "development",
 };

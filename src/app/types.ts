@@ -6,48 +6,42 @@ export type CellType = {
 
 export type Entry = Array<number>;
 
-export type WorkerMsg =
-    | Init
-    | WordlistAppend
-    | WordlistClear
-    | EntriesAppend
-    | EntriesClear
-    | BeginSearch;
-
-export type ReturnMsg =
-    | Void
-    | SolutionFound;
-
-export type Void = {
-    kind: "Void",
-};
-
-export  type SolutionFound = {
-    kind: "SolutionFound"
-};
+export enum MsgKind {
+    INIT = "INIT",
+    RESET = "RESET",
+    ADD_WORD = "ADD_WORD",
+    ADD_ENTRY = "ADD_ENTRY",
+    BEGIN_SEARCH = "BEGIN_SEARCH",
+    SOLUTION_FOUND = "SOLUTION_FOUND",
+}
 
 export interface Init {
-    kind: "INIT";
+    msgKind: MsgKind.INIT;
 }
 
-export interface WordlistAppend {
-    kind: "WORDLIST_APPEND";
-    words: Array<string>;
+export interface Reset {
+    msgKind: MsgKind.RESET;
 }
 
-export interface WordlistClear {
-    kind: "WORDLIST_CLEAR";
+export interface AppendWord {
+    msgKind: MsgKind.ADD_WORD;
+    word: string;
 }
 
-export interface EntriesAppend {
-    kind: "ENTRIES_APPEND";
-    entries: Array<Entry>;
-}
-
-export interface EntriesClear {
-    kind: "ENTRIES_CLEAR";
+export interface AppendEntry {
+    msgKind: MsgKind.ADD_ENTRY;
+    entry: Entry;
 }
 
 export interface BeginSearch {
-    kind: "BEGIN_SEARCH";
+    msgKind: MsgKind.BEGIN_SEARCH;
 }
+
+export interface SolutionFound {
+    msgKind: MsgKind.SOLUTION_FOUND;
+    solution: string;
+}
+
+export type WorkerMsg = Init | Reset | AppendWord | AppendEntry | BeginSearch;
+
+export type ReturnMsg = SolutionFound;

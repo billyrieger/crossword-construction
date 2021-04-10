@@ -1,6 +1,6 @@
 import range from "lodash/range";
 import chunk from "lodash/chunk";
-import type { CellType } from "./types";
+import type { CellType, Entry } from "./types";
 
 export class Crossword {
     rows: number;
@@ -75,6 +75,12 @@ export class Crossword {
             row += 1;
         }
         return cells;
+    }
+
+    allEntries(): Array<Entry> {
+        return [...this.across, ...this.down].map((cells) =>
+            cells.map((cell) => cell.id)
+        );
     }
 
     toggleCell(row: number, col: number) {
