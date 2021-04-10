@@ -4,6 +4,7 @@
   import Cell from "./Cell.svelte";
 
   export let crossword: Crossword = new Crossword(5, 5);
+  export let editable = false;
 
   function toggleCell(row: number, col: number) {
     crossword.toggleCell(row, col);
@@ -15,7 +16,13 @@
   {#each range(0, crossword.rows) as r}
     <tr>
       {#each range(0, crossword.cols) as c}
-        <td on:mousedown={() => toggleCell(r, c)}>
+        <td
+          on:mousedown={() => {
+            if (editable) {
+              toggleCell(r, c);
+            }
+          }}
+        >
           <Cell cell={crossword.cells[r][c]} />
         </td>
       {/each}

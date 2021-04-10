@@ -1,21 +1,53 @@
 export type CellType = {
-  id: number,
-  number?: number;
-  value?: string;
+    id: number;
+    number?: number;
+    value?: string;
 };
 
-export type Message = InitMessage | Query | Solution;
+export type Entry = Array<number>;
 
-export interface InitMessage  {
-  kind: "init",
+export type WorkerMsg =
+    | Init
+    | WordlistAppend
+    | WordlistClear
+    | EntriesAppend
+    | EntriesClear
+    | BeginSearch;
+
+export type ReturnMsg =
+    | Void
+    | SolutionFound;
+
+export type Void = {
+    kind: "Void",
+};
+
+export  type SolutionFound = {
+    kind: "SolutionFound"
+};
+
+export interface Init {
+    kind: "INIT";
 }
 
-export interface Query {
-  kind: "query",
-  input: Array<Array<number>>,
+export interface WordlistAppend {
+    kind: "WORDLIST_APPEND";
+    words: Array<string>;
 }
 
-export interface Solution {
-  kind: "solution",
-  output: BigInt,
+export interface WordlistClear {
+    kind: "WORDLIST_CLEAR";
+}
+
+export interface EntriesAppend {
+    kind: "ENTRIES_APPEND";
+    entries: Array<Entry>;
+}
+
+export interface EntriesClear {
+    kind: "ENTRIES_CLEAR";
+}
+
+export interface BeginSearch {
+    kind: "BEGIN_SEARCH";
 }

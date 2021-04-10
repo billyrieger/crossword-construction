@@ -11,7 +11,7 @@
   const worker = new Worker("worker.js");
   worker.addEventListener("message", (event: MessageEvent<Message>) => {
     switch (event.data.kind) {
-      case "solution":
+      case "SOLUTION":
         result = event.data.output;
         break;
       default:
@@ -24,7 +24,7 @@
       entry.map((cell) => cell.id)
     );
     const msg: Query = {
-      kind: "query",
+      kind: "QUERY",
       input: entries,
     };
     worker.postMessage(msg);
@@ -34,7 +34,6 @@
 <main>
   <div class="wrap">
     <button on:click={solve}>Click me</button>
-    <p>{result ?? `What is ${input} squared?`}</p>
     <Grid bind:crossword />
   </div>
 </main>
