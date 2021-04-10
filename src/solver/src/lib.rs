@@ -8,7 +8,7 @@ type Entry = Vec<usize>;
 
 struct Input {
     words: Vec<String>,
-    entries: Vec<Vec<Entry>>,
+    entries: Vec<Entry>,
 }
 
 impl Input {
@@ -20,9 +20,7 @@ impl Input {
     }
 
     fn add_entry(&mut self, entry: Entry) {
-        self.entries
-            .resize(self.entries.len().max(entry.len() + 1), vec![]);
-        self.entries[entry.len()].push(entry);
+        self.entries.push(entry);
     }
 
     fn add_word(&mut self, word: String) {
@@ -56,7 +54,49 @@ pub fn add_word(word: String) {
     }
 }
 
+pub mod constraint;
+pub mod search;
+pub mod state;
+pub mod util;
+pub mod var;
+
+const ALPHABET_LEN: usize = 26;
+
+pub const WORDLIST: &'static [u8] = include_bytes!("../../../peter-broda-wordlist__unscored.txt");
+
+use search::{SearchState, Solver};
+use var::{Dictionary, Letter};
+
 #[wasm_bindgen]
-pub fn begin_search() -> String {
-    "ASDF".into()
+extern "C" {
+    pub fn alert(s: &str);
+}
+
+fn make_char(letter: Letter) -> char {
+    (letter.0 as u8 + b'A') as char
+}
+
+#[wasm_bindgen]
+pub fn begin_search() -> Option<String> {
+    let max_word_len: usize = 15;
+
+    let dicts = Dictionary::from_wordlist(max_word_len, &WORDLIST);
+    let cells = unsafe { INPUT.entries.clone() };
+    let state = SearchState::new(cells, dicts.clone());
+    let mut solver = Solver::new(state);
+
+    loop {
+        match solver.solve() {
+            Some(_) => {
+                let mut all_letters = vec![];
+                for cell in solver.state.cells.iter() {
+                    all_letters.push(cell.value(0));
+                }
+                return Some(all_letters.into_iter().map(make_char).collect());
+            }
+            None => {
+                return None;
+            }
+        }
+    }
 }
