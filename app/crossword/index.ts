@@ -1,7 +1,9 @@
-export enum CellKind {
-    Block = 0,
-    Open = 1,
+export const enum CellKind {
+    Block = "CellKind_Block",
+    Open = "CellKind_Open",
 }
 
-export * from "./grid";
-export * from "./types";
+export const enum CellDecoration {
+    None = "CellDecoration_None",
+    Circle = "CellDecoration_Circle",
+}

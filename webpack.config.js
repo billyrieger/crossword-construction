@@ -39,12 +39,15 @@ const workerConfig = {
   module: {
     rules: [{ test: /\.ts$/, use: "ts-loader" }],
   },
-  mode: "development",
 };
 
 module.exports = (_, argv) => {
   if (argv.mode === "development") {
     appConfig.devtool = "source-map";
+  }
+
+  if (argv.mode === "production"){
+
   }
 
   return [appConfig, workerConfig];

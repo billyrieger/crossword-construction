@@ -46,6 +46,9 @@ export class Grid {
         for (const row of range(0, this.rows)) {
             for (const col of range(0, this.cols)) {
                 const cell = this.get({ row, col })!;
+                if (cell.kind === CellKind.Block) {
+                    continue;
+                }
                 const left = this.get({ row, col: col - 1 });
                 const isAcross = !left || left.kind === CellKind.Block;
 
@@ -81,7 +84,7 @@ export class Grid {
         let number = 1;
         for (const row of range(0, this.rows)) {
             for (const col of range(0, this.cols)) {
-                const cell = this.get({row, col});
+                const cell = this.get({ row, col });
                 if (!cell || cell.kind === CellKind.Block) {
                     continue;
                 }
@@ -102,19 +105,21 @@ export class Grid {
     }
 
     private calculateAcross(coords: Coords): Coords[] {
+        let { row, col } = coords;
         let slot: Coords[] = [];
-        while (this.get(coords)?.kind === CellKind.Open) {
-            slot.push(cloneDeep(coords));
-            coords.col += 1;
+        while (this.get({ row, col })?.kind === CellKind.Open) {
+            slot.push({ row, col });
+            col += 1;
         }
         return slot;
     }
 
     private calculateDown(coords: Coords): Coords[] {
+        let { row, col } = coords;
         let slot: Coords[] = [];
-        while (this.get(coords)?.kind === CellKind.Open) {
-            slot.push(cloneDeep(coords));
-            coords.row += 1;
+        while (this.get({ row, col })?.kind === CellKind.Open) {
+            slot.push({ row, col });
+            row += 1;
         }
         return slot;
     }

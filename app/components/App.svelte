@@ -1,16 +1,14 @@
 <script lang="ts">
-  import { Grid as GridType } from "../crossword";
-  import Grid from "./Grid.svelte";
+  import { Grid } from "../crossword/grid";
+  import GridComponent from "../crossword/Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  import "../../node_modules/normalize.css/normalize.css";
-
-  let crossword = new GridType(15, 15);
+  let crossword = new Grid(15, 15);
 </script>
 
 <main>
   <div class="wrap">
-    <Grid bind:crossword editable={true} />
+    <GridComponent bind:crossword editable={true} />
     <Solver input={crossword} />
   </div>
 </main>

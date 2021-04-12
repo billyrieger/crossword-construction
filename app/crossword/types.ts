@@ -1,5 +1,10 @@
 import type { CellKind } from ".";
 
+export type Coords = {
+    row: number;
+    col: number;
+};
+
 export interface Block {
     kind: CellKind.Block;
 }

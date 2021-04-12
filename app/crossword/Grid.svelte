@@ -1,15 +1,17 @@
 <script lang="ts">
   import range from "lodash/range";
-  import { CellKind, Grid as CrosswordGrid } from "../crossword";
-  import Cell from "./Cell.svelte";
+  import { CellKind } from ".";
+  import { Grid } from "./grid";
 
-  export let crossword = new CrosswordGrid(5, 5);
+  import CellComponent from "./Cell.svelte";
+
+  export let crossword = new Grid(5, 5);
   export let editable = false;
 
   function toggleCell(row: number, col: number) {
     const coords = { row, col };
     if (crossword.get(coords)?.kind === CellKind.Block) {
-      crossword = crossword.set(coords, { kind: CellKind.Open, number: 69 });
+      crossword = crossword.set(coords, { kind: CellKind.Open });
     } else {
       crossword = crossword.set(coords, { kind: CellKind.Block });
     }
@@ -27,7 +29,7 @@
             }
           }}
         >
-          <Cell
+          <CellComponent
             cell={crossword.get({ row, col }) ?? { kind: CellKind.Block }}
           />
         </td>
@@ -42,8 +44,11 @@
   }
 
   td {
-    border-bottom: solid #555 1px;
-    border-right: solid #555 1px;
+    margin: 0;
+    padding: 0;
+    border-bottom: solid black 1px;
+    border-right: solid black 1px;
+    vertical-align: middle;
   }
 
   td:first-of-type {
