@@ -1,19 +1,14 @@
 export interface CellType {
     number?: number;
     value?: string;
-    decoration?: string;
 }
- 
-export enum Decoration {
-    CIRCLE = "DECORATION_CIRCLE",
-}
+
+export type Coords = {
+    row: number;
+    col: number;
+};
 
 export type Entry = Array<number>;
-
-export enum MessageKind {
-    Init = "init",
-    Reset = "reset",
-}
 
 export enum MsgKind {
     INIT = "INIT",

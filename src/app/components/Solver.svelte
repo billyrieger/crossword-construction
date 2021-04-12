@@ -1,6 +1,9 @@
 <script lang="ts">
+  import _ from "lodash";
+  import { xlink_attr } from "svelte/internal";
+
   import type { Crossword } from "../crossword";
-  import { MsgKind, ReturnMsg, WorkerMsg } from "../types";
+  import { Coords, MsgKind, ReturnMsg, WorkerMsg } from "../types";
   import Grid from "./Grid.svelte";
 
   export let input: Crossword;
@@ -18,8 +21,7 @@
     ({ data: msg }: MessageEvent<ReturnMsg>) => {
       switch (msg.msgKind) {
         case MsgKind.SOLUTION_FOUND: {
-          found.push(input.applySolution(msg.solution));
-          found = found;
+          console.log(`found! ${msg.solution}`);
           break;
         }
       }
@@ -29,11 +31,19 @@
   const solve = () => {
     send({ msgKind: MsgKind.RESET });
     console.log("appending entries");
-    // for (const entry of input.allEntries()) {
-    //   send({ msgKind: MsgKind.ADD_ENTRY, entry });
-    // }
-    // console.log("begin search");
-    // send({ msgKind: MsgKind.BEGIN_SEARCH });
+    const coordsEq = (x: Coords, y: Coords): boolean => {
+      return x.row === y.row && x.col === y.col;
+    };
+    const allCoords = _.uniqWith(_.flatten(input.slots()), coordsEq);
+    console.log(allCoords);
+    for (const slot of input.slots()) {
+      const ids = slot.map((coords) =>
+        _.findIndex(allCoords, (x) => coordsEq(x, coords))
+      );
+      send({ msgKind: MsgKind.ADD_ENTRY, entry: ids });
+    }
+    console.log("begin search");
+    send({ msgKind: MsgKind.BEGIN_SEARCH });
   };
 </script>
 

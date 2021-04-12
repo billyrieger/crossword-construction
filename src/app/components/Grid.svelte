@@ -1,32 +1,35 @@
 <script lang="ts">
   import range from "lodash/range";
-  import { Crossword } from "../crossword";
+  import { CellKind, Crossword } from "../crossword";
   import Cell from "./Cell.svelte";
 
   export let crossword: Crossword = new Crossword(5, 5);
   export let editable = false;
 
   function toggleCell(row: number, col: number) {
-    if (crossword.getCell(row, col)) {
-      crossword = crossword.updateCell(row, col, undefined);
+    const coords = { row, col };
+    if (crossword.get(coords)?.kind === CellKind.Block) {
+      crossword = crossword.set(coords, { kind: CellKind.Open, number: 69 });
     } else {
-      crossword = crossword.updateCell(row, col, {});
+      crossword = crossword.set(coords, { kind: CellKind.Block });
     }
   }
 </script>
 
 <table>
-  {#each range(0, crossword.rows) as r}
+  {#each range(0, crossword.rows) as row}
     <tr>
-      {#each range(0, crossword.cols) as c}
+      {#each range(0, crossword.cols) as col}
         <td
           on:mousedown={() => {
             if (editable) {
-              toggleCell(r, c);
+              toggleCell(row, col);
             }
           }}
         >
-          <Cell cell={crossword.getCell(r, c)} />
+          <Cell
+            cell={crossword.get({ row, col }) ?? { kind: CellKind.Block }}
+          />
         </td>
       {/each}
     </tr>
@@ -39,8 +42,6 @@
   }
 
   td {
-    width: 2em;
-    height: 2em;
     border-bottom: solid black 1px;
     border-right: solid black 1px;
   }

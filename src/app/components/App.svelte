@@ -3,7 +3,7 @@
   import Grid from "./Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  let crossword = new Crossword(7, 7);
+  let crossword = new Crossword(5, 5);
 </script>
 
 <main>

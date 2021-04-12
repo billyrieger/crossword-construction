@@ -1,12 +1,17 @@
 <script lang="ts">
-  import type { CellType } from "../types";
-  export let cell: CellType | undefined;
+  import type { Cell } from "../crossword";
+  import { CellKind } from "../crossword";
+  export let cell: Cell;
 </script>
 
-<div class="cell" class:block={!cell} on:mousedown>
-  <div class="number">{cell?.number ?? ""}</div>
-  <div class="value">{cell?.value ?? ""}</div>
-</div>
+{#if cell.kind === CellKind.Block}
+  <div class="cell block" on:mousedown />
+{:else}
+  <div class="cell" on:mousedown>
+    <div class="number">{cell.number ?? ""}</div>
+    <div class="value">{cell.value ?? ""}</div>
+  </div>
+{/if}
 
 <style>
   * {
@@ -14,8 +19,8 @@
   }
 
   .cell {
-    width: 100%;
-    height: 100%;
+    width: 2em;
+    height: 2em;
     display: flex;
     align-items: center;
     justify-content: center;
