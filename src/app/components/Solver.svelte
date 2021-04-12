@@ -1,12 +1,11 @@
 <script lang="ts">
   import _ from "lodash";
-  import { xlink_attr } from "svelte/internal";
 
-  import type { Crossword } from "../crossword";
+  import type { Grid  as GridType } from "../crossword";
   import { Coords, MsgKind, ReturnMsg, WorkerMsg } from "../types";
   import Grid from "./Grid.svelte";
 
-  export let input: Crossword;
+  export let input: GridType;
 
   let worker = new Worker("./worker.js");
   const send = (msg: WorkerMsg) => {
@@ -14,7 +13,7 @@
   };
   send({ msgKind: MsgKind.RESET });
 
-  let found = new Array<Crossword>();
+  let found = new Array<GridType>();
 
   worker.addEventListener(
     "message",
