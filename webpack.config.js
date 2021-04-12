@@ -4,7 +4,7 @@ const sveltePreprocess = require("svelte-preprocess");
 const { resolve } = require("path");
 
 const appConfig = {
-  entry: "./src/app/index.ts",
+  entry: "./app/index.ts",
   output: { path: resolve(__dirname, "dist"), filename: "bundle.js" },
   devtool: "source-map",
   plugins: [
@@ -29,10 +29,13 @@ const appConfig = {
 };
 
 const workerConfig = {
-  entry: "./src/app/worker.js",
+  entry: "./app/worker.ts",
   output: { path: resolve(__dirname, "dist"), filename: "worker.js" },
   target: "webworker",
   experiments: { asyncWebAssembly: true },
+  module: {
+    rules: [{ test: /\.ts$/, use: "ts-loader" }],
+  },
   mode: "development",
 };
 

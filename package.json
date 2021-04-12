@@ -1,12 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "build:rust": "wasm-pack build --release src/solver",
+    "build:rust": "wasm-pack build --release solver",
     "build:webpack": "webpack --mode production",
     "build": "run-s build:rust build:webpack",
     "dev": "webpack serve --mode development",
     "clean": "rimraf dist",
-    "clean:full": "rimraf dist node_modules target src/solver/pkg"
+    "clean:full": "rimraf dist node_modules target solver/pkg"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
