@@ -1,26 +1,11 @@
-import range from "lodash/range";
+import type { Cell } from "./types";
+import { CellKind } from ".";
+import type { Coords } from "../types";
+
 import cloneDeep from "lodash/cloneDeep";
-import type { CellType, Coords, Entry } from "./types";
-import type { Maybe } from "./types/util";
+import range from "lodash/range";
 
-export enum CellKind {
-    Block = 0,
-    Open = 1,
-}
-
-export interface Block {
-    kind: CellKind.Block;
-}
-
-export interface Open {
-    kind: CellKind.Open;
-    value?: string;
-    number?: number;
-}
-
-export type Cell = Block | Open;
-
-export class Crossword {
+export class Grid {
     readonly rows: number;
     readonly cols: number;
     private cells: Cell[];
@@ -31,36 +16,28 @@ export class Crossword {
         this.cells = range(0, rows * cols).map(() => {
             return { kind: CellKind.Open };
         });
-        this.assignNumbers();
+        this.assignNumbersMut();
     }
 
-    inbounds({ row, col }: Coords): boolean {
-        return 0 <= row && row < this.rows && 0 <= col && col < this.cols;
-    }
-
-    get(coords: Coords): Maybe<Cell> {
+    get(coords: Coords): Cell | undefined {
         if (this.inbounds(coords)) {
             return cloneDeep(this.cells[coords.row * this.cols + coords.col]);
         }
     }
 
-    has(coords: Coords): boolean {
-        return this.get(coords) !== undefined;
-    }
-
-    set(coords: Coords, cell: Cell): Crossword {
+    set(coords: Coords, cell: Cell): Grid {
         let result = cloneDeep(this);
         if (this.inbounds(coords)) {
             result.cells[coords.row * this.cols + coords.col] = cell;
-            result.assignNumbers();
+            result.assignNumbersMut();
         }
         return result;
     }
 
-    update(coords: Coords, update: Partial<Cell>): Crossword {
+    update(coords: Coords, update: Partial<Cell>): Grid {
         let result = cloneDeep(this);
         result.updateMut(coords, update);
-        result.assignNumbers();
+        result.assignNumbersMut();
         return result;
     }
 
@@ -86,6 +63,10 @@ export class Crossword {
         return slots;
     }
 
+    private inbounds({ row, col }: Coords): boolean {
+        return 0 <= row && row < this.rows && 0 <= col && col < this.cols;
+    }
+
     private updateMut(coords: Coords, update: Partial<Cell>) {
         if (this.inbounds(coords)) {
             let cell = this.get(coords)!;
@@ -96,11 +77,12 @@ export class Crossword {
         }
     }
 
-    private assignNumbers() {
+    private assignNumbersMut() {
         let number = 1;
         for (const row of range(0, this.rows)) {
             for (const col of range(0, this.cols)) {
-                if (!this.has({ row, col })) {
+                const cell = this.get({row, col});
+                if (!cell || cell.kind === CellKind.Block) {
                     continue;
                 }
                 const left = this.get({ row, col: col - 1 });

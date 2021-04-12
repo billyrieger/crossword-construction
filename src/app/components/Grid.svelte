@@ -1,9 +1,9 @@
 <script lang="ts">
   import range from "lodash/range";
-  import { CellKind, Crossword } from "../crossword";
+  import { CellKind, Grid as GridType } from "../crossword";
   import Cell from "./Cell.svelte";
 
-  export let crossword: Crossword = new Crossword(5, 5);
+  export let crossword = new GridType(5, 5);
   export let editable = false;
 
   function toggleCell(row: number, col: number) {

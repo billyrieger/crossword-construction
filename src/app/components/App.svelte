@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Crossword } from "../crossword";
+  import { Grid as GridType } from "../crossword";
   import Grid from "./Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  let crossword = new Crossword(5, 5);
+  let crossword = new GridType(5, 5);
 </script>
 
 <main>
