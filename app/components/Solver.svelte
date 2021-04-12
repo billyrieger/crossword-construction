@@ -1,9 +1,11 @@
 <script lang="ts">
-  import _ from "lodash";
-
-  import type { Grid  as GridType } from "../crossword";
+  import type { Grid as GridType } from "../crossword";
   import { Coords, MsgKind, ReturnMsg, WorkerMsg } from "../types";
   import Grid from "./Grid.svelte";
+
+  import uniqWith from "lodash/uniqWith";
+  import flatten from "lodash/flatten";
+  import findIndex from "lodash/findIndex";
 
   export let input: GridType;
 
@@ -33,11 +35,11 @@
     const coordsEq = (x: Coords, y: Coords): boolean => {
       return x.row === y.row && x.col === y.col;
     };
-    const allCoords = _.uniqWith(_.flatten(input.slots()), coordsEq);
+    const allCoords = uniqWith(flatten(input.slots()), coordsEq);
     console.log(allCoords);
     for (const slot of input.slots()) {
       const ids = slot.map((coords) =>
-        _.findIndex(allCoords, (x) => coordsEq(x, coords))
+        findIndex(allCoords, (x) => coordsEq(x, coords))
       );
       send({ msgKind: MsgKind.ADD_ENTRY, entry: ids });
     }

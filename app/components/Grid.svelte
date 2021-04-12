@@ -36,21 +36,21 @@
   {/each}
 </table>
 
-<style>
+<style lang="scss">
   table {
     border-collapse: collapse;
   }
 
   td {
-    border-bottom: solid black 1px;
-    border-right: solid black 1px;
+    border-bottom: solid #555 1px;
+    border-right: solid #555 1px;
   }
 
   td:first-of-type {
-    border-left: solid black 1px;
+    border-left: solid #555 1px;
   }
 
   tr:first-of-type td {
-    border-top: solid black 1px;
+    border-top: solid #555 1px;
   }
 </style>

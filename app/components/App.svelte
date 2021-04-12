@@ -3,7 +3,9 @@
   import Grid from "./Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  let crossword = new GridType(5, 5);
+  import "../../node_modules/normalize.css/normalize.css";
+
+  let crossword = new GridType(15, 15);
 </script>
 
 <main>
@@ -13,7 +15,14 @@
   </div>
 </main>
 
-<style>
+<style lang="scss">
+  @import "./style/global.scss";
+
+  :global(*) {
+    background-color: #222222;
+    color: #555555;
+  }
+
   .wrap {
     margin: 0 auto;
     width: 600px;

@@ -1,8 +1,3 @@
-export interface CellType {
-    number?: number;
-    value?: string;
-}
-
 export type Coords = {
     row: number;
     col: number;
