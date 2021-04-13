@@ -64,6 +64,32 @@ impl Dictionary {
             .collect()
     }
 
+    pub fn from_words(max_len: usize, words: &[String]) -> Vec<Rc<Self>> {
+        let mut words_by_len: Vec<Vec<Word>> = vec![vec![]; max_len + 1];
+        for word in words {
+            if let Some(word) = deunicode::deunicode(word)
+                .bytes()
+                .map(|b| {
+                    if b.is_ascii_alphabetic() {
+                        Some(Letter((b.to_ascii_uppercase() - b'A') as usize))
+                    } else {
+                        None
+                    }
+                })
+                .collect::<Option<Word>>()
+            {
+                if word.len() <= max_len {
+                    words_by_len[word.len()].push(word);
+                }
+            }
+        }
+        words_by_len
+            .into_iter()
+            .enumerate()
+            .map(|(len, words)| Rc::new(Self::new(words, len)))
+            .collect()
+    }
+
     pub fn new(words: Vec<Word>, word_len: usize) -> Self {
         assert!(words.iter().all(|w| w.len() == word_len));
 
