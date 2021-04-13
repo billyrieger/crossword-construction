@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Grid } from "../crossword/grid";
-  import GridComponent from "../crossword/Grid.svelte";
+  import GridComponent from "./Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  let crossword = new Grid(15, 15);
+  let crossword = new Grid(7, 7);
 </script>
 
 <main>
@@ -14,12 +14,7 @@
 </main>
 
 <style lang="scss">
-  @import "./style/global.scss";
-
-  :global(*) {
-    background-color: #222222;
-    color: #555555;
-  }
+  @import "../../style/global.scss";
 
   .wrap {
     margin: 0 auto;

@@ -1,13 +1,11 @@
 <script lang="ts">
   import type { Grid as GridType } from "../crossword/grid";
   import { Coords, MsgKind, ReturnMsg, WorkerMsg } from "../types";
-  import GridComponent from "../crossword/Grid.svelte";
+  import GridComponent from "./Grid.svelte";
 
-  import uniqWith from "lodash/uniqWith";
-  import flatten from "lodash/flatten";
   import findIndex from "lodash/findIndex";
-  import { range } from "lodash";
-import { CellKind } from "../crossword";
+  import { cloneDeep, range } from "lodash";
+  import { CellKind } from "../crossword";
 
   export let input: GridType;
 
@@ -25,6 +23,21 @@ import { CellKind } from "../crossword";
       switch (msg.msgKind) {
         case MsgKind.SOLUTION_FOUND: {
           console.log(`found! ${msg.solution}`);
+          let grid = cloneDeep(input);
+          let i = 0;
+          for (const row of range(0, grid.rows)) {
+            for (const col of range(0, grid.cols)) {
+              if (grid.get({ row, col })!.kind === CellKind.Block) {
+                continue;
+              }
+              grid = grid.update(
+                { row, col },
+                { value: msg.solution.charAt(i) }
+              );
+              i += 1;
+            }
+          }
+          found = [...found, grid];
           break;
         }
       }

@@ -1,12 +1,14 @@
 <script lang="ts">
   import range from "lodash/range";
-  import { CellKind } from ".";
-  import { Grid } from "./grid";
+  import { CellKind } from "../crossword";
+  import { Grid } from "../crossword/grid";
 
   import CellComponent from "./Cell.svelte";
 
   export let crossword = new Grid(5, 5);
   export let editable = false;
+
+  let tableRef: HTMLElement;
 
   function toggleCell(row: number, col: number) {
     const coords = { row, col };
@@ -18,7 +20,7 @@
   }
 </script>
 
-<table>
+<table bind:this={tableRef} tabindex={-1} on:mousedown={() => {tableRef.focus();}}>
   {#each range(0, crossword.rows) as row}
     <tr>
       {#each range(0, crossword.cols) as col}

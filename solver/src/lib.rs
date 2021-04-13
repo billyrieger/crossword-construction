@@ -62,7 +62,7 @@ pub mod var;
 
 const ALPHABET_LEN: usize = 26;
 
-pub const WORDLIST: &'static [u8] = include_bytes!("../../peter-broda-wordlist__unscored.txt");
+const WORDLIST: &'static [u8] = include_bytes!("../../../nyt.txt");
 
 use search::{SearchState, Solver};
 use var::{Dictionary, Letter};

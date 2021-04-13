@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { CellKind } from ".";
-  import type { Cell } from "./types";
+  import { CellKind } from "../crossword";
+  import type { Cell } from "../crossword/types";
 
   export let cell: Cell;
 </script>
