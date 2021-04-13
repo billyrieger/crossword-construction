@@ -1,10 +1,3 @@
-export type Coords = {
-    row: number;
-    col: number;
-};
-
-export type Entry = Array<number>;
-
 export enum MsgKind {
     INIT = "INIT",
     RESET = "RESET",
@@ -12,6 +5,7 @@ export enum MsgKind {
     ADD_ENTRY = "ADD_ENTRY",
     BEGIN_SEARCH = "BEGIN_SEARCH",
     SOLUTION_FOUND = "SOLUTION_FOUND",
+    NO_SOLUTION_FOUND = "NO_SOLUTION_FOUND"
 }
 
 export interface Init {
@@ -29,7 +23,7 @@ export interface AppendWord {
 
 export interface AppendEntry {
     msgKind: MsgKind.ADD_ENTRY;
-    entry: Entry;
+    entry: number[];
 }
 
 export interface BeginSearch {
@@ -41,6 +35,10 @@ export interface SolutionFound {
     solution: string;
 }
 
+export interface NoSolutionFound {
+    msgKind: MsgKind.NO_SOLUTION_FOUND;
+}
+
 export type WorkerMsg = Init | Reset | AppendWord | AppendEntry | BeginSearch;
 
-export type ReturnMsg = SolutionFound;
+export type ReturnMsg = SolutionFound | NoSolutionFound;

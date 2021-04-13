@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Grid as GridType } from "../crossword/grid";
-  import { Coords, MsgKind, ReturnMsg, WorkerMsg } from "../types";
+  import type { Index } from "../crossword";
+  import { MsgKind, ReturnMsg, WorkerMsg } from "../types";
   import GridComponent from "./Grid.svelte";
 
   import findIndex from "lodash/findIndex";
@@ -40,6 +41,9 @@
           found = [...found, grid];
           break;
         }
+        case MsgKind.NO_SOLUTION_FOUND: {
+          console.log("no solution found :(");
+        }
       }
     }
   );
@@ -47,10 +51,10 @@
   const solve = () => {
     send({ msgKind: MsgKind.RESET });
     console.log("appending entries");
-    const coordsEq = (x: Coords, y: Coords): boolean => {
+    const coordsEq = (x: Index, y: Index): boolean => {
       return x.row === y.row && x.col === y.col;
     };
-    let allCoords: Coords[] = [];
+    let allCoords: Index[] = [];
     for (const row of range(0, input.rows)) {
       for (const col of range(0, input.cols)) {
         const coords = { row, col };
@@ -71,8 +75,20 @@
     console.log("begin search");
     send({ msgKind: MsgKind.BEGIN_SEARCH });
   };
+
+  const loadWordlist = async () => {
+    console.log("loading wordlist");
+    const response = await fetch("wordlist.txt");
+    const body = await response.text();
+    console.log("sending to wasm");
+    for (const word of body.split("\n")) {
+      send({ msgKind: MsgKind.ADD_WORD, word });
+    }
+    console.log("done");
+  };
 </script>
 
+<button on:click={loadWordlist}>Load wordlist</button>
 <div>
   <button on:click={solve}>Solve</button>
   {#each found as solution}
@@ -82,7 +98,7 @@
   {/each}
 </div>
 
-<style>
+<style lang="scss">
   .solution {
     font-size: 75%;
     padding: 1em;

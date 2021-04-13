@@ -1,6 +1,6 @@
 [workspace]
-members = ["solver"]
+members = ["solver/lib", "solver/wasm"]
 
 [profile.release]
 lto = true
-opt-level = "s"
+opt-level = 3

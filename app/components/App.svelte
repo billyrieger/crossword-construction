@@ -3,21 +3,28 @@
   import GridComponent from "./Grid.svelte";
   import Solver from "./Solver.svelte";
 
-  let crossword = new Grid(7, 7);
+  let gridRows = 15;
+  let gridCols = 15;
+
+  $: crossword = new Grid(gridRows, gridCols);
 </script>
 
-<main>
-  <div class="wrap">
-    <GridComponent bind:crossword editable={true} />
+<button on:click={() => {gridRows += 1;}}>Add row</button>
+<button on:click={() => {gridCols += 1;}}>Add col</button>
+<main class="main">
+  <GridComponent bind:crossword editable={true} />
+  {#if crossword}
     <Solver input={crossword} />
-  </div>
+  {/if}
 </main>
 
-<style lang="scss">
-  @import "../../style/global.scss";
+<style lang="scss" global>
+  $picnic-primary: #70d;
 
-  .wrap {
-    margin: 0 auto;
-    width: 600px;
+  @import "../../node_modules/picnic/src/picnic";
+
+  .main {
+    width: 100%;
+    height: 100%;
   }
 </style>

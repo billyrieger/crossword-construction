@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const sveltePreprocess = require("svelte-preprocess");
 const { resolve } = require("path");
 
@@ -21,14 +20,10 @@ const appConfig = {
         },
       },
       { test: /\.ts$/, use: "ts-loader" },
-      { test: /\.css$/, use: [MiniCssExtractPlugin.loader, "css-loader"] },
+      { test: /\.s?css$/, use: [MiniCssExtractPlugin.loader, "css-loader"] },
     ],
   },
-  // optimization: {
-  //   minimize: true,
-  //   minimizer: [new CssMinimizerPlugin()],
-  // },
-  resolve: { extensions: [".ts", ".js", ".svelte"] },
+  resolve: { extensions: [".ts", ".js", ".svelte", ".scss" ] },
 };
 
 const workerConfig = {

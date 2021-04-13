@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build:rust": "wasm-pack build --release solver",
+    "build:rust": "wasm-pack build --release solver/wasm",
     "build:webpack": "webpack --mode production",
     "build": "run-s build:rust build:webpack",
     "dev": "webpack serve --mode development",
@@ -29,6 +29,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "picnic": "^6.5.5"
   }
 }

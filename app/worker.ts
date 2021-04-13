@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import * as wasm from "../solver/pkg/solver";
+import * as wasm from "../solver/wasm/pkg/solver_wasm";
 import type { WorkerMsg } from "./types";
 
 onmessage = ({ data: msg }: MessageEvent<WorkerMsg>) => {
@@ -22,12 +22,17 @@ onmessage = ({ data: msg }: MessageEvent<WorkerMsg>) => {
             break;
         }
         case "BEGIN_SEARCH": {
-            const solution = wasm.begin_search();
-            const msg = {
-                msgKind: "SOLUTION_FOUND",
-                solution,
-            };
-            postMessage(msg);
+            const solution = wasm.search();
+            if (solution) {
+                postMessage({
+                    msgKind: "SOLUTION_FOUND",
+                    solution,
+                });
+            } else {
+                postMessage({
+                    msgKind: "NO_SOLUTION_FOUND",
+                });
+            }
             break;
         }
     }

@@ -1,6 +1,5 @@
-import type { Cell } from "./types";
 import { CellKind } from ".";
-import type { Coords } from "../types";
+import type { Cell, Index } from ".";
 
 import cloneDeep from "lodash/cloneDeep";
 import range from "lodash/range";
@@ -19,13 +18,13 @@ export class Grid {
         this.assignNumbersMut();
     }
 
-    get(coords: Coords): Cell | undefined {
+    get(coords: Index): Cell | undefined {
         if (this.inbounds(coords)) {
             return cloneDeep(this.cells[coords.row * this.cols + coords.col]);
         }
     }
 
-    set(coords: Coords, cell: Cell): Grid {
+    set(coords: Index, cell: Cell): Grid {
         let result = cloneDeep(this);
         if (this.inbounds(coords)) {
             result.cells[coords.row * this.cols + coords.col] = cell;
@@ -34,14 +33,14 @@ export class Grid {
         return result;
     }
 
-    update(coords: Coords, update: Partial<Cell>): Grid {
+    update(coords: Index, update: Partial<Cell>): Grid {
         let result = cloneDeep(this);
         result.updateMut(coords, update);
         result.assignNumbersMut();
         return result;
     }
 
-    slots(): Array<Coords[]> {
+    slots(): Array<Index[]> {
         let slots = [];
         for (const row of range(0, this.rows)) {
             for (const col of range(0, this.cols)) {
@@ -66,17 +65,23 @@ export class Grid {
         return slots;
     }
 
-    private inbounds({ row, col }: Coords): boolean {
+    private inbounds({ row, col }: Index): boolean {
         return 0 <= row && row < this.rows && 0 <= col && col < this.cols;
     }
 
-    private updateMut(coords: Coords, update: Partial<Cell>) {
+    private updateMut(coords: Index, update: Partial<Cell>) {
         if (this.inbounds(coords)) {
             let cell = this.get(coords)!;
-            this.cells[coords.row * this.cols + coords.col] = {
-                ...cell,
-                ...update,
-            };
+            if (update.kind === CellKind.Block) {
+                this.cells[coords.row * this.cols + coords.col] = {
+                    kind: CellKind.Block,
+                };
+            } else {
+                this.cells[coords.row * this.cols + coords.col] = {
+                    ...cell,
+                    ...update,
+                };
+            }
         }
     }
 
@@ -104,9 +109,9 @@ export class Grid {
         }
     }
 
-    private calculateAcross(coords: Coords): Coords[] {
+    private calculateAcross(coords: Index): Index[] {
         let { row, col } = coords;
-        let slot: Coords[] = [];
+        let slot: Index[] = [];
         while (this.get({ row, col })?.kind === CellKind.Open) {
             slot.push({ row, col });
             col += 1;
@@ -114,9 +119,9 @@ export class Grid {
         return slot;
     }
 
-    private calculateDown(coords: Coords): Coords[] {
+    private calculateDown(coords: Index): Index[] {
         let { row, col } = coords;
-        let slot: Coords[] = [];
+        let slot: Index[] = [];
         while (this.get({ row, col })?.kind === CellKind.Open) {
             slot.push({ row, col });
             row += 1;

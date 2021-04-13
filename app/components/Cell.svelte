@@ -1,19 +1,25 @@
 <script lang="ts">
   import { CellKind } from "../crossword";
-  import type { Cell } from "../crossword/types";
+  import type { Cell } from "../crossword";
 
   export let cell: Cell;
+  export let style: "NONE" | "ACTIVE" = "NONE";
 </script>
 
 <div
   class="cell"
   class:block={cell.kind === CellKind.Block}
   class:open={cell.kind === CellKind.Open}
+  class:active={style === "ACTIVE"}
   on:mousedown
 >
   {#if cell.kind === CellKind.Open}
-    <div class="number">{cell.number ?? ""}</div>
-    <div class="value">{cell.value ?? ""}</div>
+    {#if cell.number !== undefined}
+      <div class="number">{cell.number}</div>
+    {/if}
+    {#if cell.value !== undefined}
+      <div class="value">{cell.value}</div>
+    {/if}
   {/if}
 </div>
 
@@ -46,10 +52,14 @@
     left: 0;
     font-size: 75%;
 
-    background-color: inherit;
+    background-color: none;
+  }
+
+  .active {
+    background-color: hotpink;
   }
 
   .value {
-    background-color: inherit;
+    background-color: none;
   }
 </style>
