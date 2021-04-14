@@ -21,9 +21,13 @@ const appConfig = {
       },
       { test: /\.ts$/, use: "ts-loader" },
       { test: /\.s?css$/, use: [MiniCssExtractPlugin.loader, "css-loader"] },
+      {
+        test: /\.(ttf|eot|woff|woff2|svg)$/,
+        type: "asset/resource",
+      },
     ],
   },
-  resolve: { extensions: [".ts", ".js", ".svelte", ".scss" ] },
+  resolve: { extensions: [".ts", ".js", ".svelte", ".scss"] },
 };
 
 const workerConfig = {
@@ -41,8 +45,7 @@ module.exports = (_, argv) => {
     appConfig.devtool = "source-map";
   }
 
-  if (argv.mode === "production"){
-
+  if (argv.mode === "production") {
   }
 
   return [appConfig, workerConfig];
