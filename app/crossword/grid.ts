@@ -1,5 +1,5 @@
 import { CellKind } from ".";
-import type { Cell, Index } from ".";
+import type { Cell, GridPos } from ".";
 
 import cloneDeep from "lodash/cloneDeep";
 import range from "lodash/range";
@@ -18,13 +18,13 @@ export class Grid {
         this.assignNumbersMut();
     }
 
-    get(coords: Index): Cell | undefined {
+    get(coords: GridPos): Cell | undefined {
         if (this.inbounds(coords)) {
             return cloneDeep(this.cells[coords.row * this.cols + coords.col]);
         }
     }
 
-    set(coords: Index, cell: Cell): Grid {
+    set(coords: GridPos, cell: Cell): Grid {
         let result = cloneDeep(this);
         if (this.inbounds(coords)) {
             result.cells[coords.row * this.cols + coords.col] = cell;
@@ -33,14 +33,14 @@ export class Grid {
         return result;
     }
 
-    update(coords: Index, update: Partial<Cell>): Grid {
+    update(coords: GridPos, update: Partial<Cell>): Grid {
         let result = cloneDeep(this);
         result.updateMut(coords, update);
         result.assignNumbersMut();
         return result;
     }
 
-    slots(): Array<Index[]> {
+    slots(): Array<GridPos[]> {
         let slots = [];
         for (const row of range(0, this.rows)) {
             for (const col of range(0, this.cols)) {
@@ -65,11 +65,11 @@ export class Grid {
         return slots;
     }
 
-    private inbounds({ row, col }: Index): boolean {
+    private inbounds({ row, col }: GridPos): boolean {
         return 0 <= row && row < this.rows && 0 <= col && col < this.cols;
     }
 
-    private updateMut(coords: Index, update: Partial<Cell>) {
+    private updateMut(coords: GridPos, update: Partial<Cell>) {
         if (this.inbounds(coords)) {
             let cell = this.get(coords)!;
             if (update.kind === CellKind.Block) {
@@ -109,9 +109,9 @@ export class Grid {
         }
     }
 
-    private calculateAcross(coords: Index): Index[] {
+    private calculateAcross(coords: GridPos): GridPos[] {
         let { row, col } = coords;
-        let slot: Index[] = [];
+        let slot: GridPos[] = [];
         while (this.get({ row, col })?.kind === CellKind.Open) {
             slot.push({ row, col });
             col += 1;
@@ -119,9 +119,9 @@ export class Grid {
         return slot;
     }
 
-    private calculateDown(coords: Index): Index[] {
+    private calculateDown(coords: GridPos): GridPos[] {
         let { row, col } = coords;
-        let slot: Index[] = [];
+        let slot: GridPos[] = [];
         while (this.get({ row, col })?.kind === CellKind.Open) {
             slot.push({ row, col });
             row += 1;

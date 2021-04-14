@@ -3,7 +3,7 @@
   import clamp from "lodash/clamp";
   import range from "lodash/range";
 
-  import { CellKind, Index } from "../crossword";
+  import { CellKind, GridPos } from "../crossword";
   import { Grid } from "../crossword/grid";
 
   import Cell from "./Cell.svelte";
@@ -13,7 +13,7 @@
 
   let tableRef: HTMLElement;
 
-  let active: Index | undefined;
+  let active: GridPos | undefined;
 
   const moveActive = (drow: number, dcol: number) => {
     if (active) {
@@ -24,7 +24,7 @@
     }
   };
 
-  function toggleCell(coords: Index) {
+  function toggleCell(coords: GridPos) {
     if (crossword.get(coords)?.kind === CellKind.Block) {
       crossword = crossword.update(coords, { kind: CellKind.Open });
     } else {

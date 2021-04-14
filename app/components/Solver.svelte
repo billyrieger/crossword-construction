@@ -1,11 +1,11 @@
 <script lang="ts">
+  import findIndex from "lodash/findIndex";
+  import cloneDeep from "lodash/cloneDeep";
+  import range from "lodash/range";
   import type { Grid as GridType } from "../crossword/grid";
-  import type { Index } from "../crossword";
+  import type { GridPos } from "../crossword";
   import { MsgKind, ReturnMsg, WorkerMsg } from "../types";
   import GridComponent from "./Grid.svelte";
-
-  import findIndex from "lodash/findIndex";
-  import { cloneDeep, range } from "lodash";
   import { CellKind } from "../crossword";
 
   export let input: GridType;
@@ -51,10 +51,10 @@
   const solve = () => {
     send({ msgKind: MsgKind.RESET });
     console.log("appending entries");
-    const coordsEq = (x: Index, y: Index): boolean => {
+    const coordsEq = (x: GridPos, y: GridPos): boolean => {
       return x.row === y.row && x.col === y.col;
     };
-    let allCoords: Index[] = [];
+    let allCoords: GridPos[] = [];
     for (const row of range(0, input.rows)) {
       for (const col of range(0, input.cols)) {
         const coords = { row, col };

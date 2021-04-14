@@ -27,7 +27,7 @@ const appConfig = {
       },
     ],
   },
-  resolve: { extensions: [".ts", ".js", ".svelte", ".scss"] },
+  resolve: { extensions: [".js", ".ts", ".svelte"] },
 };
 
 const workerConfig = {

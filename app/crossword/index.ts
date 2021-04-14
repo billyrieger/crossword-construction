@@ -13,7 +13,7 @@ export const enum Direction {
     Down = "Direction_Down",
 }
 
-export type Index = {
+export type GridPos = {
     row: number;
     col: number;
 };
@@ -30,8 +30,8 @@ export interface Open {
 
 export type Cell = Block | Open;
 
-export interface Slot {
-    direction: Direction,
+export type Slot = {
+    direction: Direction;
     cells: Open[];
-    coords: Index[],
-}
+    coords: GridPos[];
+};
