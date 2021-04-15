@@ -26,9 +26,9 @@
 
   function toggleCell(coords: GridPos) {
     if (crossword.get(coords)?.kind === CellKind.Block) {
-      crossword = crossword.update(coords, { kind: CellKind.Open });
+      crossword = crossword.set(coords, { kind: CellKind.Open });
     } else {
-      crossword = crossword.update(coords, { kind: CellKind.Block });
+      crossword = crossword.set(coords, { kind: CellKind.Block });
     }
   }
 </script>
@@ -93,7 +93,7 @@
           on:mousedown={() => {
             if (editable) {
               tableRef.focus();
-              active = { row, col };
+              toggleCell({ row, col });
             }
           }}
         >
@@ -110,6 +110,10 @@
 </table>
 
 <style lang="scss">
+  @import "../style/_theme";
+
+  $border: solid var(--colorCellBlock) 1px;
+
   table {
     border-collapse: collapse;
   }
@@ -117,16 +121,16 @@
   td {
     margin: 0;
     padding: 0;
-    border-bottom: solid black 1px;
-    border-right: solid black 1px;
     vertical-align: middle;
+    border-bottom: $border;
+    border-right: $border;
   }
 
   td:first-of-type {
-    border-left: solid #555 1px;
+    border-left: $border;
   }
 
   tr:first-of-type td {
-    border-top: solid #555 1px;
+    border-top: $border;
   }
 </style>

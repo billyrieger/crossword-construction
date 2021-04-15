@@ -65,7 +65,7 @@
     }
     let slots = [];
     for (const slot of input.slots()) {
-      const ids = slot.map((coords) =>
+      const ids = slot.coords.map((coords) =>
         findIndex(allCoords, (x) => coordsEq(x, coords))
       );
       slots.push(ids);

@@ -23,7 +23,9 @@
   {/if}
 </div>
 
-<style>
+<style lang="scss">
+  @import "../style/_theme";
+
   * {
     user-select: none;
   }
@@ -38,12 +40,12 @@
     position: relative;
   }
 
-  .open {
-    background-color: white;
+  .block {
+    background-color: var(--colorCellBlock);
   }
 
-  .block {
-    background-color: black;
+  .open {
+    background-color: var(--colorCellOpen);
   }
 
   .number {
@@ -52,7 +54,7 @@
     left: 0;
     font-size: 75%;
 
-    background-color: none;
+    background-color: transparent;
   }
 
   .active {

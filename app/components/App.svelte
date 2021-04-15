@@ -6,48 +6,54 @@
   let gridRows = 15;
   let gridCols = 15;
 
+  let useDark = false;
+
   $: crossword = new Grid(gridRows, gridCols);
+
+  $: {
+    document.documentElement.setAttribute(
+      "data-theme",
+      useDark ? "dark" : "light"
+    );
+  }
 </script>
 
-<main class="main">
-  <div class="dimensions">
-    <button
-      class="icon-minus"
-      on:click={() => {
-        gridRows -= 1;
-      }}
-    />
-    <span>{gridRows}</span>
-    <button
-      class="button"
-      on:click={() => {
-        gridRows += 1;
-      }}
-    >
-      <div class="icon-clock" />
-    </button>
-  </div>
-  <div class="dimensions">
-    <button
-      class="icon-minus"
-      on:click={() => {
-        gridCols -= 1;
-      }}
-    />
-    <span>{gridCols}</span>
-    <button
-      class="icon-plus"
-      on:click={() => {
-        gridCols += 1;
-      }}
-    />
-  </div>
+<main class="main" class:dark={useDark}>
+  <button
+    on:click={() => {
+      useDark = !useDark;
+      console.log(useDark);
+    }}>Dark mode</button
+  >
   <GridComponent bind:crossword editable={true} />
   <Solver input={crossword} />
 </main>
 
 <style lang="scss" global>
-  $picnic-primary: #fa8;
+  $picnic-primary: rgb(102, 37, 155);
 
   @import "../style/global";
+
+  :global(:root) {
+    --colorBg: white;
+    --colorFg: black;
+
+    --colorCellBlock: black;
+    --colorCellOpen: white;
+    --colorCellText: black;
+  }
+
+  :global(:root[data-theme="dark"]) {
+    --colorBg:black;
+    --colorFg: white;
+
+    --colorCellBlock: black;
+    --colorCellOpen: #444;
+    --colorCellText: white;
+  }
+
+  .main {
+    color: var(--colorFg);
+    background-color: var(--colorBg);
+  }
 </style>
