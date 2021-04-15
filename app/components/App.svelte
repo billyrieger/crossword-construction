@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Grid } from "../crossword/grid";
   import GridComponent from "./Grid.svelte";
+  import GridStatistics from "./GridStatistics.svelte";
   import Solver from "./Solver.svelte";
 
   let gridRows = 15;
@@ -26,7 +27,8 @@
     }}>Dark mode</button
   >
   <GridComponent bind:crossword editable={true} />
-  <Solver input={crossword} />
+  <GridStatistics input={crossword} />
+  <!-- <Solver input={crossword} /> -->
 </main>
 
 <style lang="scss" global>
@@ -44,7 +46,7 @@
   }
 
   :global(:root[data-theme="dark"]) {
-    --colorBg:black;
+    --colorBg: black;
     --colorFg: white;
 
     --colorCellBlock: black;

@@ -1,5 +1,5 @@
 import { CellKind, Direction } from ".";
-import type { Cell, GridPos, Slot } from ".";
+import type { Cell, GridPos, Entry } from ".";
 
 import cloneDeep from "lodash/cloneDeep";
 import range from "lodash/range";
@@ -40,7 +40,7 @@ export class Grid {
     return result;
   }
 
-  slots(): Array<Slot> {
+  entries(): Array<Entry> {
     let slots = [];
     for (const row of range(0, this.rows)) {
       for (const col of range(0, this.cols)) {
@@ -109,7 +109,7 @@ export class Grid {
     }
   }
 
-  private calculateAcross(start: GridPos): Slot {
+  private calculateAcross(start: GridPos): Entry {
     let cells = [],
       coords = [],
       pos = { ...start };
@@ -130,7 +130,7 @@ export class Grid {
     };
   }
 
-  private calculateDown(start: GridPos): Slot {
+  private calculateDown(start: GridPos): Entry {
     let cells = [],
       coords = [],
       pos = { ...start };

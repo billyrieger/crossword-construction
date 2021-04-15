@@ -30,7 +30,7 @@ export interface Open {
 
 export type Cell = Block | Open;
 
-export type Slot = {
+export type Entry = {
   dir: Direction;
   cells: Open[];
   coords: GridPos[];
