@@ -1,3 +1,22 @@
-$black: #212223;
-$mediumGray: #767985;
-$white: #f9f9f9;
+:root {
+  --black: #010101;
+  --darkGray: #232323;
+  --mediumGray: #343434;
+  --white: #fefefe;
+}
+
+:root[data-theme="light"] {
+  --colorBg: var(--white);
+  --colorFg: var(--darkGray);
+
+  --colorCellBlock: var(--black);
+  --colorCellOpen: var(--white);
+}
+
+:root[data-theme="dark"] {
+  --colorBg: var(--darkGray);
+  --colorFg: var(--white);
+
+  --colorCellBlock: var(--black);
+  --colorCellOpen: var(--mediumGray);
+}

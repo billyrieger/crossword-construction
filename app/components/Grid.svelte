@@ -110,12 +110,11 @@
 </table>
 
 <style lang="scss">
-  @import "../style/_theme";
-
   $border: solid var(--colorCellBlock) 1px;
 
   table {
     border-collapse: collapse;
+    display: block;
   }
 
   td {

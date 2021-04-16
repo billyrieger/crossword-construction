@@ -24,8 +24,6 @@
 </div>
 
 <style lang="scss">
-  @import "../style/_theme";
-
   * {
     user-select: none;
   }
@@ -50,18 +48,17 @@
 
   .number {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -0.15em;
+    left: 0.1em;
     font-size: 75%;
+    background-color: transparent;
+  }
 
+  .value {
     background-color: transparent;
   }
 
   .active {
     background-color: hotpink;
-  }
-
-  .value {
-    background-color: none;
   }
 </style>

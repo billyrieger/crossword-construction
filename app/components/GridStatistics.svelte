@@ -22,7 +22,6 @@
   <li>Total entries: {entries.length}.</li>
   <li>Total across: {across.length}.</li>
   <li>Total down: {down.length}.</li>
-  <li>Average length: {averageLength}.</li>
 </ul>
 
 <style lang="scss">

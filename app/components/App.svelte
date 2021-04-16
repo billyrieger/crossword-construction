@@ -2,7 +2,6 @@
   import { Grid } from "../crossword/grid";
   import GridComponent from "./Grid.svelte";
   import GridStatistics from "./GridStatistics.svelte";
-  import Solver from "./Solver.svelte";
 
   let gridRows = 15;
   let gridCols = 15;
@@ -23,12 +22,10 @@
   <button
     on:click={() => {
       useDark = !useDark;
-      console.log(useDark);
     }}>Dark mode</button
   >
   <GridComponent bind:crossword editable={true} />
   <GridStatistics input={crossword} />
-  <!-- <Solver input={crossword} /> -->
 </main>
 
 <style lang="scss" global>
@@ -36,26 +33,10 @@
 
   @import "../style/global";
 
-  :global(:root) {
-    --colorBg: white;
-    --colorFg: black;
-
-    --colorCellBlock: black;
-    --colorCellOpen: white;
-    --colorCellText: black;
-  }
-
-  :global(:root[data-theme="dark"]) {
-    --colorBg: black;
-    --colorFg: white;
-
-    --colorCellBlock: black;
-    --colorCellOpen: #444;
-    --colorCellText: white;
-  }
-
   .main {
     color: var(--colorFg);
     background-color: var(--colorBg);
+    width: 100vw;
+    height: 100vh;
   }
 </style>
