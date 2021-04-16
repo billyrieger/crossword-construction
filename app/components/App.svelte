@@ -6,7 +6,7 @@
   let gridRows = 15;
   let gridCols = 15;
 
-  let useDark = false;
+  let useDark = true;
 
   $: crossword = new Grid(gridRows, gridCols);
 
@@ -16,27 +16,33 @@
       useDark ? "dark" : "light"
     );
   }
+
+  const toggleDark = () => {
+    useDark = !useDark;
+  };
 </script>
 
 <main class="main" class:dark={useDark}>
-  <button
-    on:click={() => {
-      useDark = !useDark;
-    }}>Dark mode</button
-  >
-  <GridComponent bind:crossword editable={true} />
-  <GridStatistics input={crossword} />
+  <!-- <button on:click={toggleDark}>Dark mode</button> -->
+  <div class="center">
+    <GridComponent bind:crossword />
+    <GridStatistics input={crossword} />
+  </div>
 </main>
 
 <style lang="scss" global>
-  $picnic-primary: rgb(102, 37, 155);
-
   @import "../style/global";
 
   .main {
-    color: var(--colorFg);
-    background-color: var(--colorBg);
+    overflow: clip;
+
     width: 100vw;
     height: 100vh;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

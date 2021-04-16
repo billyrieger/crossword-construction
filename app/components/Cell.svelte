@@ -3,14 +3,12 @@
   import type { Cell } from "../crossword";
 
   export let cell: Cell;
-  export let style: "NONE" | "ACTIVE" = "NONE";
 </script>
 
 <div
   class="cell"
   class:block={cell.kind === CellKind.Block}
   class:open={cell.kind === CellKind.Open}
-  class:active={style === "ACTIVE"}
   on:mousedown
 >
   {#if cell.kind === CellKind.Open}
@@ -39,26 +37,22 @@
   }
 
   .block {
-    background-color: var(--colorCellBlock);
+    background-color: var(--cell-block);
   }
 
   .open {
-    background-color: var(--colorCellOpen);
+    background-color: var(--cell-open);
   }
 
   .number {
     position: absolute;
-    top: -0.15em;
-    left: 0.1em;
+    top: 0;
+    left: 0;
     font-size: 75%;
     background-color: transparent;
   }
 
   .value {
     background-color: transparent;
-  }
-
-  .active {
-    background-color: hotpink;
   }
 </style>

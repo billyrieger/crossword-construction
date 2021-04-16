@@ -1,22 +1,27 @@
 :root {
   --black: #010101;
-  --darkGray: #232323;
-  --mediumGray: #343434;
+  --gray-dark: #232323;
+  --gray-medium: #343434;
   --white: #fefefe;
 }
 
 :root[data-theme="light"] {
-  --colorBg: var(--white);
-  --colorFg: var(--darkGray);
+  --background: var(--white);
+  --foreground: var(--gray-dark);
 
-  --colorCellBlock: var(--black);
-  --colorCellOpen: var(--white);
+  --cell-block: var(--black);
+  --cell-open: var(--white);
 }
 
 :root[data-theme="dark"] {
-  --colorBg: var(--darkGray);
-  --colorFg: var(--white);
+  --background: var(--gray-dark);
+  --foreground: var(--white);
 
-  --colorCellBlock: var(--black);
-  --colorCellOpen: var(--mediumGray);
+  --cell-block: var(--black);
+  --cell-open: var(--gray-medium);
+}
+
+:root {
+  color: var(--foreground);
+  background-color: var(--background);
 }

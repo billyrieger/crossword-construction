@@ -30,6 +30,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "picnic": "^6.5.5"
+    "normalize.css": "^8.0.1"
   }
 }
