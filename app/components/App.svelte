@@ -2,9 +2,10 @@
   import { Grid } from "../crossword/grid";
   import GridComponent from "./Grid.svelte";
   import GridStatistics from "./GridStatistics.svelte";
+  import Solver from "./Solver.svelte";
 
-  let gridRows = 15;
-  let gridCols = 15;
+  let gridRows = 5;
+  let gridCols = 5;
 
   let useDark = true;
 
@@ -27,6 +28,7 @@
   <div class="center">
     <GridComponent bind:crossword />
     <GridStatistics input={crossword} />
+    <Solver input={crossword} />
   </div>
 </main>
 
