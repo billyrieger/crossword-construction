@@ -1,8 +1,7 @@
-import { CellKind, Direction } from ".";
+import { CellKind, Direction, Open } from ".";
 import type { Cell, GridPos, Entry } from ".";
 
 import cloneDeep from "lodash/cloneDeep";
-import range from "lodash/range";
 
 export class Grid {
   readonly rows: number;
@@ -12,7 +11,7 @@ export class Grid {
   constructor(rows: number, cols: number) {
     this.rows = rows;
     this.cols = cols;
-    this.cells = range(0, rows * cols).map(() => {
+    this.cells = new Array(rows * cols).map(() => {
       return { kind: CellKind.Open };
     });
     this.assignNumbersMut();
@@ -20,9 +19,13 @@ export class Grid {
 
   get(coords: GridPos): Cell | undefined {
     if (this.inbounds(coords)) {
-      return cloneDeep(this.cells[coords.row * this.cols + coords.col]);
+      return this.getUnchecked(coords);
     }
   }
+
+  getUnchecked = (coords: GridPos): Cell => {
+    return cloneDeep(this.cells[coords.row * this.cols + coords.col]);
+  };
 
   set(coords: GridPos, cell: Cell): Grid {
     let result = cloneDeep(this);
@@ -33,6 +36,11 @@ export class Grid {
     return result;
   }
 
+  addRow = (): Grid => {
+    let result = new Grid(this.rows + 1, this.cols);
+    return result;
+  };
+
   update(coords: GridPos, update: Partial<Cell>): Grid {
     let result = cloneDeep(this);
     result.updateMut(coords, update);
@@ -42,9 +50,9 @@ export class Grid {
 
   entries(): Array<Entry> {
     let slots = [];
-    for (const row of range(0, this.rows)) {
-      for (const col of range(0, this.cols)) {
-        const cell = this.get({ row, col })!;
+    for (let row = 0; row < this.rows; row += 1) {
+      for (let col = 0; col < this.cols; col += 1) {
+        const cell = this.getUnchecked({ row, col });
         if (cell.kind === CellKind.Block) {
           continue;
         }
@@ -85,21 +93,17 @@ export class Grid {
     }
   }
 
-  private assignNumbersMut() {
+  private assignNumbersMut = () => {
     let number = 1;
-    for (const row of range(0, this.rows)) {
-      for (const col of range(0, this.cols)) {
+    for (let row = 0; row < this.rows; row += 1) {
+      for (let col = 0; col < this.cols; col += 1) {
         const cell = this.get({ row, col });
         if (!cell || cell.kind === CellKind.Block) {
           continue;
         }
-        const left = this.get({ row, col: col - 1 });
-        const isAcross = !left || left.kind === CellKind.Block;
-
-        const above = this.get({ row: row - 1, col });
-        const isDown = !above || above.kind === CellKind.Block;
-
-        if (isAcross || isDown) {
+        const across = this.get({ row, col: col - 1 })?.kind !== CellKind.Open;
+        const down = this.get({ row: row - 1, col })?.kind !== CellKind.Open;
+        if (across || down) {
           this.updateMut({ row, col }, { number: number });
           number += 1;
         } else {
@@ -107,47 +111,25 @@ export class Grid {
         }
       }
     }
-  }
+  };
 
-  private calculateAcross(start: GridPos): Entry {
-    let cells = [],
-      coords = [],
-      pos = { ...start };
-    while (true) {
-      const cell = this.get(pos);
-      if (cell?.kind === CellKind.Open) {
-        cells.push(cell);
-        coords.push(pos);
-        pos = { ...pos, col: pos.col + 1 };
-      } else {
-        break;
-      }
+  private calculateAcross = ({ row, col }: GridPos): Entry => {
+    const entry: Entry = { dir: Direction.Across, cells: [], coords: [] };
+    while (this.get({ row, col })?.kind === CellKind.Open) {
+      entry.cells.push(<Open>this.get({ row, col }));
+      entry.coords.push({ row, col });
+      col += 1;
     }
-    return {
-      dir: Direction.Across,
-      cells,
-      coords,
-    };
-  }
+    return entry;
+  };
 
-  private calculateDown(start: GridPos): Entry {
-    let cells = [],
-      coords = [],
-      pos = { ...start };
-    while (true) {
-      const cell = this.get(pos);
-      if (cell?.kind === CellKind.Open) {
-        cells.push(cell);
-        coords.push(pos);
-        pos = { ...pos, row: pos.row + 1 };
-      } else {
-        break;
-      }
+  private calculateDown = ({ row, col }: GridPos): Entry => {
+    const entry: Entry = { dir: Direction.Down, cells: [], coords: [] };
+    while (this.get({ row, col })?.kind === CellKind.Open) {
+      entry.cells.push(<Open>this.get({ row, col }));
+      entry.coords.push({ row, col });
+      row += 1;
     }
-    return {
-      dir: Direction.Down,
-      cells,
-      coords,
-    };
-  }
+    return entry;
+  };
 }
