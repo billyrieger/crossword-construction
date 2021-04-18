@@ -7,7 +7,6 @@
   import Cell from "./Cell.svelte";
 
   export let crossword = new Grid(15, 15);
-  export let editable = false;
 
   let tableRef: HTMLElement;
 

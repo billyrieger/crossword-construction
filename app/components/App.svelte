@@ -23,28 +23,20 @@
   };
 </script>
 
-<main class="main" class:dark={useDark}>
-  <!-- <button on:click={toggleDark}>Dark mode</button> -->
-  <div class="center">
-    <GridComponent bind:crossword />
-    <GridStatistics input={crossword} />
-    <Solver input={crossword} />
-  </div>
+<main>
+  <button on:click={toggleDark}>Dark mode</button>
+  <GridComponent bind:crossword />
+  <GridStatistics input={crossword} />
+  <Solver input={crossword} />
 </main>
 
 <style lang="scss" global>
   @import "../style/global";
 
-  .main {
+  main {
     overflow: clip;
 
     width: 100vw;
     height: 100vh;
-  }
-
-  .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 </style>

@@ -6,16 +6,16 @@
 }
 
 :root[data-theme="light"] {
-  --background: var(--white);
   --foreground: var(--gray-dark);
+  --background: var(--white);
 
   --cell-block: var(--black);
   --cell-open: var(--white);
 }
 
 :root[data-theme="dark"] {
-  --background: var(--gray-dark);
   --foreground: var(--white);
+  --background: var(--gray-dark);
 
   --cell-block: var(--black);
   --cell-open: var(--gray-medium);

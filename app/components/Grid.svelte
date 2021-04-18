@@ -1,5 +1,4 @@
 <script lang="ts">
-  // Lodash imports.
   import range from "lodash/range";
   import { CellKind, GridPos } from "../crossword";
   import { Grid } from "../crossword/grid";

@@ -4,7 +4,7 @@
     "build:rust": "wasm-pack build --release solver/wasm",
     "build:webpack": "webpack --mode production",
     "build": "run-s build:rust build:webpack",
-    "dev": "webpack serve --mode development",
+    "dev": "webpack serve --mode none",
     "clean": "rimraf dist"
   },
   "devDependencies": {

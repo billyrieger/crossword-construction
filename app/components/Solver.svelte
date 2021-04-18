@@ -10,7 +10,7 @@
 
   export let input: GridType;
 
-  let worker = new Worker("./worker.js");
+  let worker = new Worker(new URL("../worker.ts", import.meta.url));
   const send = (msg: WorkerMsg) => {
     worker.postMessage(msg);
   };
@@ -91,7 +91,7 @@
 
 <button on:click={loadWordlist}>Load wordlist</button>
 <div>
-  <button on:click={solve}>Solve</button>
+  <button class="icon-eye" on:click={solve} />
   {#each found as solution}
     <div class="solution">
       <GridComponent crossword={solution} />
