@@ -84,6 +84,7 @@
     for (const word of body.split("\n")) {
       send({ msgKind: MsgKind.ADD_WORD, word });
     }
+    send({ msgKind: MsgKind.FINALIZE });
     console.log("done");
   };
 </script>

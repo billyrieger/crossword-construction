@@ -5,10 +5,14 @@ const { resolve } = require("path");
 
 const appConfig = {
   entry: "./app/index.ts",
-  output: { path: resolve(__dirname, "dist"), filename: "bundle.js" },
+  output: {
+    path: resolve(__dirname, "dist"),
+    filename: "[chunkhash].js",
+    assetModuleFilename: "[contenthash][ext]",
+  },
   plugins: [
     new HtmlWebpackPlugin({ template: "./static/index.html" }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({ filename: "[chunkhash].css" }),
   ],
   module: {
     rules: [
@@ -27,7 +31,12 @@ const appConfig = {
       },
     ],
   },
-  resolve: { extensions: [".js", ".ts", ".svelte"] },
+  resolve: {
+    extensions: [".js", ".ts", ".svelte"],
+    alias: {
+      svelte: resolve("node_modules", "svelte"),
+    },
+  },
 };
 
 const workerConfig = {

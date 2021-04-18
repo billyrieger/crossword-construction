@@ -4,8 +4,8 @@
   import GridStatistics from "./GridStatistics.svelte";
   import Solver from "./Solver.svelte";
 
-  let gridRows = 5;
-  let gridCols = 5;
+  let gridRows = 6;
+  let gridCols = 6;
 
   let useDark = true;
 

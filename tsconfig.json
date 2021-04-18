@@ -1,7 +1,7 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "module": "es6",
+    "module": "es2020",
     "outDir": "./dist/",
     "noImplicitAny": true,
     "strict": true,

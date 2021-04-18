@@ -28,6 +28,13 @@ pub fn add_word(word: String) {
 }
 
 #[wasm_bindgen]
+pub fn finalize() {
+    unsafe {
+        INPUT.finalize();
+    }
+}
+
+#[wasm_bindgen]
 pub fn search() -> Option<String> {
     unsafe { INPUT.search() }
 }

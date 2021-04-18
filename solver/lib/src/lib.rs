@@ -13,10 +13,12 @@ const ALPHABET_LEN: usize = 26;
 type Entry = Vec<usize>;
 
 use search::{SearchState, Solver};
+use std::rc::Rc;
 use var::Dictionary;
 
 pub struct Input {
     pub words: Vec<String>,
+    dicts: Option<Vec<Rc<Dictionary>>>,
     pub entries: Vec<Entry>,
 }
 
@@ -25,13 +27,18 @@ impl Input {
         Self {
             entries: vec![],
             words: vec![],
+            dicts: None,
         }
     }
 
-    pub fn search(&self) -> Option<String> {
-        let max_word_len: usize = 15;
+    pub fn finalize(&mut self) {
+        self.dicts = Some(Dictionary::from_words(15, &self.words));
+    }
 
-        let dicts = Dictionary::from_words(max_word_len, &self.words);
+    pub fn search(&self) -> Option<String> {
+        // let max_word_len: usize = 15;
+
+        let dicts = self.dicts.clone().unwrap();
         let cells = self.entries.clone();
         let state = SearchState::new(cells, dicts.clone());
         let mut solver = Solver::new(state);

@@ -1,5 +1,6 @@
 export enum MsgKind {
   INIT = "INIT",
+  FINALIZE = "FINALIZE",
   RESET = "RESET",
   ADD_WORD = "ADD_WORD",
   ADD_ENTRY = "ADD_ENTRY",
@@ -10,6 +11,10 @@ export enum MsgKind {
 
 export interface Init {
   msgKind: MsgKind.INIT;
+}
+
+export interface Finalize {
+  msgKind: MsgKind.FINALIZE;
 }
 
 export interface Reset {
@@ -39,6 +44,6 @@ export interface NoSolutionFound {
   msgKind: MsgKind.NO_SOLUTION_FOUND;
 }
 
-export type WorkerMsg = Init | Reset | AppendWord | AppendEntry | BeginSearch;
+export type WorkerMsg = Init | Finalize | Reset | AppendWord | AppendEntry | BeginSearch;
 
 export type ReturnMsg = SolutionFound | NoSolutionFound;

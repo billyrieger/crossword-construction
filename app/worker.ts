@@ -21,6 +21,10 @@ onmessage = ({ data: msg }: MessageEvent<WorkerMsg>) => {
       wasm.add_word(msg.word);
       break;
     }
+    case "FINALIZE": {
+      wasm.finalize();
+      break;
+    }
     case "BEGIN_SEARCH": {
       const solution = wasm.search();
       if (solution) {
