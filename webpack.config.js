@@ -7,12 +7,12 @@ const appConfig = {
   entry: "./app/index.ts",
   output: {
     path: resolve(__dirname, "dist"),
-    filename: "index.js",
+    filename: "[name].[contenthash].js",
     assetModuleFilename: "[name].[contenthash][ext]",
   },
   plugins: [
     new HtmlWebpackPlugin({ template: "./static/index.html" }),
-    new MiniCssExtractPlugin({ filename: "main.css" }),
+    new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
   ],
   experiments: { asyncWebAssembly: true },
   module: {
