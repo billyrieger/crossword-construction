@@ -1,153 +1,121 @@
-import { CellKind, Direction } from ".";
+import { CellKind, Direction, Open } from ".";
 import type { Cell, GridPos, Entry } from ".";
 
 import cloneDeep from "lodash/cloneDeep";
-import range from "lodash/range";
 
 export class Grid {
   readonly rows: number;
   readonly cols: number;
-  private cells: Cell[];
+  private cells: Array<{ coords: GridPos; cell: Cell }>;
 
   constructor(rows: number, cols: number) {
     this.rows = rows;
     this.cols = cols;
-    this.cells = range(0, rows * cols).map(() => {
-      return { kind: CellKind.Open };
+    let i = 0;
+    this.cells = new Array(rows * cols).fill(0).map(() => {
+      const item = {
+        coords: { row: Math.floor(i / cols), col: i % cols },
+        cell: { kind: CellKind.Open },
+      };
+      i += 1;
+      return item;
     });
     this.assignNumbersMut();
   }
 
-  get(coords: GridPos): Cell | undefined {
-    if (this.inbounds(coords)) {
-      return cloneDeep(this.cells[coords.row * this.cols + coords.col]);
-    }
+  allCells(): Array<{coords: GridPos, cell: Cell}> {
+    return cloneDeep(this.cells);
   }
 
-  set(coords: GridPos, cell: Cell): Grid {
-    let result = cloneDeep(this);
+  getCell(coords: GridPos): Cell | undefined {
     if (this.inbounds(coords)) {
-      result.cells[coords.row * this.cols + coords.col] = cell;
+      return this.getCellUnchecked(coords);
+    }
+  };
+
+  getCellUnchecked(coords: GridPos): Cell {
+    return cloneDeep(this.cells[coords.row * this.cols + coords.col].cell);
+  };
+
+  setCell({ row, col }: GridPos, cell: Cell): Grid {
+    let result = cloneDeep(this);
+    if (this.inbounds({ row, col })) {
+      result.cells[row * this.cols + col].cell = cell;
       result.assignNumbersMut();
     }
     return result;
-  }
+  };
 
-  update(coords: GridPos, update: Partial<Cell>): Grid {
+  updateCell(coords: GridPos, update: Partial<Open>): Grid {
     let result = cloneDeep(this);
     result.updateMut(coords, update);
     result.assignNumbersMut();
     return result;
   }
 
-  entries(): Array<Entry> {
-    let slots = [];
-    for (const row of range(0, this.rows)) {
-      for (const col of range(0, this.cols)) {
-        const cell = this.get({ row, col })!;
-        if (cell.kind === CellKind.Block) {
-          continue;
-        }
-        const left = this.get({ row, col: col - 1 });
-        const isAcross = !left || left.kind === CellKind.Block;
-
-        const above = this.get({ row: row - 1, col });
-        const isDown = !above || above.kind === CellKind.Block;
-
-        if (isAcross) {
-          slots.push(this.calculateAcross({ row, col }));
-        }
-        if (isDown) {
-          slots.push(this.calculateDown({ row, col }));
-        }
+  entries(): Entry[] {
+    let entries = [];
+    for (const { coords } of this.cells.filter(
+      ({ cell }) => cell.kind === CellKind.Open
+    )) {
+      const { row, col } = coords;
+      const isAcross = this.getCell({ row, col: col - 1 })?.kind !== CellKind.Open;
+      const isDown = this.getCell({ row: row - 1, col })?.kind !== CellKind.Open;
+      if (isAcross) {
+        entries.push(this.calculateAcross({ row, col }));
+      }
+      if (isDown) {
+        entries.push(this.calculateDown({ row, col }));
       }
     }
-    return slots;
-  }
+    return entries;
+  };
+
+  private assignNumbersMut() {
+    let number = 1;
+    for (const { coords } of this.cells.filter(
+      ({ cell }) => cell.kind === CellKind.Open
+    )) {
+      const { row, col } = coords;
+      const isAcross = this.getCell({ row, col: col - 1 })?.kind !== CellKind.Open;
+      const isDown = this.getCell({ row: row - 1, col })?.kind !== CellKind.Open;
+      if (isAcross || isDown) {
+        this.updateMut({ row, col }, { number: number });
+        number += 1;
+      } else {
+        this.updateMut({ row, col }, { number: undefined });
+      }
+    }
+  };
 
   private inbounds({ row, col }: GridPos): boolean {
     return 0 <= row && row < this.rows && 0 <= col && col < this.cols;
   }
 
-  private updateMut(coords: GridPos, update: Partial<Cell>) {
-    if (this.inbounds(coords)) {
-      let cell = this.get(coords)!;
-      if (update.kind === CellKind.Block) {
-        this.cells[coords.row * this.cols + coords.col] = {
-          kind: CellKind.Block,
-        };
-      } else {
-        this.cells[coords.row * this.cols + coords.col] = {
-          ...cell,
-          ...update,
-        };
-      }
+  private updateMut({ row, col }: GridPos, update: Partial<Open>) {
+    const cell = this.getCell({ row, col });
+    if (cell?.kind === CellKind.Open) {
+      this.cells[row * this.cols + col].cell = { ...cell, ...update };
     }
   }
 
-  private assignNumbersMut() {
-    let number = 1;
-    for (const row of range(0, this.rows)) {
-      for (const col of range(0, this.cols)) {
-        const cell = this.get({ row, col });
-        if (!cell || cell.kind === CellKind.Block) {
-          continue;
-        }
-        const left = this.get({ row, col: col - 1 });
-        const isAcross = !left || left.kind === CellKind.Block;
-
-        const above = this.get({ row: row - 1, col });
-        const isDown = !above || above.kind === CellKind.Block;
-
-        if (isAcross || isDown) {
-          this.updateMut({ row, col }, { number: number });
-          number += 1;
-        } else {
-          this.updateMut({ row, col }, { number: undefined });
-        }
-      }
+  private calculateAcross({ row, col }: GridPos): Entry {
+    let entry: Entry = { dir: Direction.Across, cells: [], coords: [] };
+    while (this.getCell({ row, col })?.kind === CellKind.Open) {
+      entry.cells.push(<Open>this.getCell({ row, col }));
+      entry.coords.push({ row, col });
+      col += 1;
     }
+    return entry;
   }
 
-  private calculateAcross(start: GridPos): Entry {
-    let cells = [],
-      coords = [],
-      pos = { ...start };
-    while (true) {
-      const cell = this.get(pos);
-      if (cell?.kind === CellKind.Open) {
-        cells.push(cell);
-        coords.push(pos);
-        pos = { ...pos, col: pos.col + 1 };
-      } else {
-        break;
-      }
+  private calculateDown({ row, col }: GridPos): Entry {
+    let entry: Entry = { dir: Direction.Down, cells: [], coords: [] };
+    while (this.getCell({ row, col })?.kind === CellKind.Open) {
+      entry.cells.push(<Open>this.getCell({ row, col }));
+      entry.coords.push({ row, col });
+      row += 1;
     }
-    return {
-      dir: Direction.Across,
-      cells,
-      coords,
-    };
-  }
-
-  private calculateDown(start: GridPos): Entry {
-    let cells = [],
-      coords = [],
-      pos = { ...start };
-    while (true) {
-      const cell = this.get(pos);
-      if (cell?.kind === CellKind.Open) {
-        cells.push(cell);
-        coords.push(pos);
-        pos = { ...pos, row: pos.row + 1 };
-      } else {
-        break;
-      }
-    }
-    return {
-      dir: Direction.Down,
-      cells,
-      coords,
-    };
+    return entry;
   }
 }

@@ -17,6 +17,7 @@
   send({ msgKind: MsgKind.RESET });
 
   let found = new Array<GridType>();
+  $: console.log(found);
 
   worker.addEventListener(
     "message",
@@ -28,17 +29,17 @@
           let i = 0;
           for (const row of range(0, grid.rows)) {
             for (const col of range(0, grid.cols)) {
-              if (grid.get({ row, col })!.kind === CellKind.Block) {
+              if (grid.getCell({ row, col })!.kind === CellKind.Block) {
                 continue;
               }
-              grid = grid.update(
+              grid = grid.updateCell(
                 { row, col },
                 { value: msg.solution.charAt(i) }
               );
               i += 1;
             }
           }
-          found = [...found, grid];
+          found = [...found, cloneDeep(grid)];
           break;
         }
         case MsgKind.NO_SOLUTION_FOUND: {
@@ -58,7 +59,7 @@
     for (const row of range(0, input.rows)) {
       for (const col of range(0, input.cols)) {
         const coords = { row, col };
-        if (input.get(coords)!.kind === CellKind.Open) {
+        if (input.getCell(coords)!.kind === CellKind.Open) {
           allCoords.push(coords);
         }
       }

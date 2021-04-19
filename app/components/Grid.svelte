@@ -1,10 +1,10 @@
 <script lang="ts">
   import range from "lodash/range";
   import { CellKind, GridPos } from "../crossword";
-  import { Grid } from "../crossword/grid";
+  import type { Grid } from "../crossword/grid";
   import Cell from "./Cell.svelte";
 
-  export let crossword = new Grid(15, 15);
+  export let crossword: Grid;
 </script>
 
 <table>
@@ -12,9 +12,7 @@
     <tr>
       {#each range(0, crossword.cols) as col}
         <td>
-          <Cell
-            cell={crossword.get({ row, col }) ?? { kind: CellKind.Block }}
-          />
+          <Cell cell={crossword.getCellUnchecked({ row, col })} />
         </td>
       {/each}
     </tr>
