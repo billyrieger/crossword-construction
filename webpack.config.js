@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const sveltePreprocess = require("svelte-preprocess");
 const { resolve } = require("path");
 
@@ -13,6 +14,9 @@ const appConfig = {
   plugins: [
     new HtmlWebpackPlugin({ template: "./static/index.html" }),
     new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
+    new CopyPlugin({
+      patterns: [ { from: "assets" } ]
+    })
   ],
   experiments: { asyncWebAssembly: true },
   module: {

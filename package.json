@@ -10,6 +10,7 @@
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
     "@types/lodash": "^4.14.168",
+    "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^5.2.0",
     "css-minimizer-webpack-plugin": "^2.0.0",
     "html-webpack-plugin": "^5.3.1",
