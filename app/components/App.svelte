@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Grid } from "../crossword/grid";
   import GridComponent from "./Grid.svelte";
+  import GridEditor from "./GridEditor.svelte";
   import GridStatistics from "./GridStatistics.svelte";
   import Solver from "./Solver.svelte";
 
@@ -25,7 +26,7 @@
 
 <main>
   <button on:click={toggleDark}>Dark mode</button>
-  <GridComponent bind:crossword />
+  <GridEditor bind:grid={crossword} />
   <GridStatistics input={crossword} />
   <Solver input={crossword} />
 </main>
@@ -34,9 +35,11 @@
   @import "../style/global";
 
   main {
-    overflow: clip;
-
     width: 100vw;
     height: 100vh;
+    position: fixed;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
   }
 </style>

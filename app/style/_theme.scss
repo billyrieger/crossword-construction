@@ -3,6 +3,9 @@
   --gray-dark: #232323;
   --gray-medium: #343434;
   --white: #fefefe;
+
+  color: var(--foreground);
+  background-color: var(--background);
 }
 
 :root[data-theme="light"] {
@@ -19,9 +22,4 @@
 
   --cell-block: var(--black);
   --cell-open: var(--gray-medium);
-}
-
-:root {
-  color: var(--foreground);
-  background-color: var(--background);
 }

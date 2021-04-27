@@ -91,18 +91,31 @@
 </script>
 
 <button on:click={loadWordlist}>Load wordlist</button>
-<div>
-  <button class="icon-eye" on:click={solve} />
+<button class="icon-eye" on:click={solve} />
+<ul class="list">
   {#each found as solution}
-    <div class="solution">
+    <li class="solution">
       <GridComponent crossword={solution} />
-    </div>
+    </li>
   {/each}
-</div>
+</ul>
 
 <style lang="scss">
+  .list {
+    padding: 0;
+    width: min-content;
+    max-height: 500px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1em;
+    border: 5px solid var(--foreground);
+  }
+
   .solution {
     font-size: 75%;
+    display: block;
     padding: 1em;
+    padding-top: 0;
   }
 </style>

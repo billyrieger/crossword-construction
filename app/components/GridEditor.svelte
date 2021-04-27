@@ -1,9 +1,7 @@
 <script lang="ts">
-  import clamp from "lodash/clamp";
   import { CellKind, GridPos } from "../crossword";
   import { Grid } from "../crossword/grid";
   import GridComponent from "./Grid.svelte";
-  import Cell from "./Cell.svelte";
 
   export let grid = new Grid(15, 15);
 
@@ -14,6 +12,10 @@
       grid = grid.setCell(coords, { kind: CellKind.Block });
     }
   }
+
+  const onClick = (e: CustomEvent<MouseEvent & GridPos>) => {
+    toggleCell(e.detail);
+  };
 </script>
 
-<GridComponent crossword={grid} />
+<GridComponent crossword={grid} clickable={true} on:click={onClick} />

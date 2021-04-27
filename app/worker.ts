@@ -26,18 +26,22 @@ onmessage = ({ data: msg }: MessageEvent<WorkerMsg>) => {
       break;
     }
     case "BEGIN_SEARCH": {
-      const solution = wasm.search();
-      if (solution) {
-        postMessage({
-          msgKind: "SOLUTION_FOUND",
-          solution,
-        });
-      } else {
-        postMessage({
-          msgKind: "NO_SOLUTION_FOUND",
-        });
-      }
-      break;
+      postMessage({
+        msgKind: "SOLUTION_FOUND",
+        solution: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      })
+      // const solution = wasm.search();
+      // if (solution) {
+      //   postMessage({
+      //     msgKind: "SOLUTION_FOUND",
+      //     solution,
+      //   });
+      // } else {
+      //   postMessage({
+      //     msgKind: "NO_SOLUTION_FOUND",
+      //   });
+      // }
+      // break;
     }
   }
 };

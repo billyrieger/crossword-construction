@@ -1,17 +1,28 @@
 <script lang="ts">
   import range from "lodash/range";
-  import { CellKind, GridPos } from "../crossword";
   import type { Grid } from "../crossword/grid";
   import Cell from "./Cell.svelte";
 
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
+
   export let crossword: Grid;
+  export let focusable = false;
+  export let clickable = false;
 </script>
 
-<table>
+<table tabindex={focusable ? 0 : undefined}>
   {#each range(0, crossword.rows) as row}
     <tr>
       {#each range(0, crossword.cols) as col}
-        <td>
+        <td
+          on:mousedown={clickable
+            ? (e) => {
+                dispatch("click", { e, row, col });
+              }
+            : undefined}
+        >
           <Cell cell={crossword.getCellUnchecked({ row, col })} />
         </td>
       {/each}
