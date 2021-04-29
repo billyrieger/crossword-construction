@@ -14,6 +14,7 @@
   }
 
   const onClick = (e: CustomEvent<MouseEvent & GridPos>) => {
+    console.log(e.detail);
     toggleCell(e.detail);
   };
 </script>

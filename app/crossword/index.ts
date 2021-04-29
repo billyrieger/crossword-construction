@@ -1,15 +1,15 @@
 export const enum CellKind {
-  Block,
+  Block = 0,
   Open,
 }
 
 export const enum CellDecoration {
-  None,
+  None = 0,
   Circle,
 }
 
 export const enum Direction {
-  Across,
+  Across = 0,
   Down,
 }
 
