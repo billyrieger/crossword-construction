@@ -37,7 +37,7 @@
   }
 
   .block {
-    background-color: var(--cell-block);
+    background-color: black;
   }
 
   .open {

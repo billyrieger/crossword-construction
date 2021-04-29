@@ -1,21 +1,26 @@
 export const enum CellKind {
-  Block = "CellKind_Block",
-  Open = "CellKind_Open",
+  Block,
+  Open,
 }
 
 export const enum CellDecoration {
-  None = "CellDecoration_None",
-  Circle = "CellDecoration_Circle",
+  None,
+  Circle,
 }
 
 export const enum Direction {
-  Across = "Direction_Across",
-  Down = "Direction_Down",
+  Across,
+  Down,
 }
 
 export type GridPos = {
   row: number;
   col: number;
+};
+
+export type Dimensions = {
+  rows: number;
+  cols: number;
 };
 
 export interface Block {

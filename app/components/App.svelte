@@ -37,9 +37,14 @@
   main {
     width: 100vw;
     height: 100vh;
-    position: fixed;
     overflow: hidden;
-    display: flex;
-    flex-direction: row;
+
+    color: black;
+    background-color: white;
+  }
+
+  :root[data-theme="light"] main {
+    color: white;
+    background-color: black;
   }
 </style>
