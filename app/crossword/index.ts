@@ -35,6 +35,8 @@ export interface Open {
 
 export type Cell = Block | Open;
 
+export type GridCell = Cell & GridPos;
+
 export type Entry = {
   dir: Direction;
   cells: Open[];

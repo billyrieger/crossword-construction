@@ -29,6 +29,8 @@
 </table>
 
 <style lang="scss">
+  @import "../style/variables";
+
   $border: solid 1px;
 
   table {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CellKind, GridPos } from "../crossword";
+  import { CellKind, GridCell, GridPos } from "../crossword";
   import { Grid } from "../crossword/grid";
   import GridComponent from "./Grid.svelte";
 
@@ -13,10 +13,10 @@
     }
   }
 
-  const onClick = (e: CustomEvent<MouseEvent & GridPos>) => {
+  const onClick = (e: CustomEvent<{event: MouseEvent, cell: GridCell}>) => {
     console.log(e.detail);
-    toggleCell(e.detail);
+    toggleCell(e.detail.cell);
   };
 </script>
 
-<GridComponent crossword={grid} clickable={true} on:click={onClick} />
+<GridComponent crossword={grid} clickable={true} on:cellMousedown={onClick} />
